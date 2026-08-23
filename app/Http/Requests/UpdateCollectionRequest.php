@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Override;
 
-class StoreCollectionRequest extends FormRequest
+class UpdateCollectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,12 @@ class StoreCollectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:4|max:100|unique:collections,name',
+            'name' => 'required|string|min:4|max:100',
             'description' => 'nullable|string|max:255',
             'is_public' => 'boolean',
         ];
     }
+
     /**
      * Custom error messages for each validation rules.
      *
@@ -39,7 +40,6 @@ class StoreCollectionRequest extends FormRequest
     {
         return [
             'name.required' => 'El nombre de la colección es requerido.',
-            'name.unique' => 'El nombre de la colección ya está ocupado. Intente con uno nuevo.',
             'name.min' => 'El nombre de la colección debe tener al menos 4 caracteres.',
             'name.max' => 'El nombre de la colección debe tener máximo 100 caracteres.',
             'description' => 'La descripción de la colección debe tener máximo 255 caracteres.',
