@@ -13,23 +13,26 @@
                 <input type="text" placeholder="Buscar marcadores..."
                     class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] pl-9 pr-4 py-2.5 text-sm text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200">
             </div>
-            <button
-                class="shrink-0 bg-[#007AFF] text-white font-medium rounded-xl px-5 py-2.5 hover:bg-[#0056CC] transition-all duration-200 shadow-sm text-sm">
+            <a
+                href="{{ route('bookmarks.create') }}"
+                class="shrink-0 bg-[#007AFF] text-white font-medium rounded-xl px-5 py-2.5 hover:bg-[#0056CC] transition-all duration-200 shadow-sm text-sm cursor-pointer">
                 + Nuevo marcador
-            </button>
+            </a>
         </div>
     </div>
 
     <!-- Filter bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-[#d2d2d7] pb-4">
         <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-            <button
-                class="px-4 py-1.5 bg-[#1d1d1f] text-white text-sm font-medium rounded-full whitespace-nowrap">Todos</button>
-            <button
-                class="px-4 py-1.5 text-[#86868b] hover:bg-gray-100 text-sm font-medium rounded-full whitespace-nowrap transition-colors">Favoritos</button>
-            <button
-                class="px-4 py-1.5 text-[#86868b] hover:bg-gray-100 text-sm font-medium rounded-full whitespace-nowrap transition-colors">Sin
-                colección</button>
+            <a
+                class="px-4 py-1.5 bg-[#1d1d1f] text-white text-sm font-medium rounded-full whitespace-nowrap cursor-pointer">Todos</a>
+            <a
+                href="{{ request()->fullUrlWithQuery(['is_favorite' => true]) }}"
+                class="px-4 py-1.5 text-[#86868b] hover:bg-gray-100 text-sm font-medium rounded-full whitespace-nowrap transition-colors cursor-pointer">Favoritos</a>
+            <a
+                href="{{ request()->fullUrlWithQuery(['without_collection' => null]) }}"
+                class="px-4 py-1.5 text-[#86868b] hover:bg-gray-100 text-sm font-medium rounded-full whitespace-nowrap transition-colors cursor-pointer">Sin
+                colección</a>
         </div>
         <div class="flex items-center gap-4 shrink-0">
             <button class="flex items-center text-sm text-[#1d1d1f] hover:text-[#007AFF] transition-colors cursor-pointer">
@@ -118,7 +121,7 @@
                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                 </path>
                             </svg>{{ $bookmark->click_count }}</span>
-                        <span>hace 2h</span>
+                        <span>{{ $bookmark->last_clicked_at->diffForHumans() }}</span>
                     </div>
                 </div>
             </div>
