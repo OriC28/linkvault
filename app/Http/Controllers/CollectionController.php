@@ -13,7 +13,7 @@ class CollectionController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $collections =$user->collections()->paginate(6);
+        $collections = $user->collections()->paginate(6);
         return view('collections.index', compact('collections'));
     }
 
