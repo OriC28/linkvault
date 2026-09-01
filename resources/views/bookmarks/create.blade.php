@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex items-center mb-3">
-        <a href="bookmarks-index.html"
+        <a href="{{ route('bookmarks.index') }}"
             class="p-2 -ml-2 mr-2 text-[#86868b] hover:text-[#1d1d1f] hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Volver">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@
     <!-- Form Card -->
     <div class="max-w-2xl mx-auto">
         <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/60 p-3 md:p-8">
-            <form method="POST" action="{{ route('bookmark.store') }}">
+            <form method="POST" action="{{ route('bookmarks.store') }}">
                 @csrf
                 <!-- URL Field -->
                 <div class="mb-3">
@@ -76,7 +76,7 @@
                             x-init="
                                 new Tagify($el, {
                                 whitelist: {{ json_encode($tags) }},
-
+                                maxTags: 3,
                                 dropdown: {
                                     maxItems: 5,
                                     classname: 'tags-blue',
