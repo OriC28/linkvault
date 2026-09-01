@@ -30,8 +30,16 @@ class Bookmark extends Model
             $query->where('is_favorite', $is_favorite_value);
         });
 
-        $query->when($filters['without_collection'] ?? false, function ($query, $without_collection_value){
-            $query->where('collection_id', $without_collection_value);
+        $query->when($filters['without_collection'] ?? false, function ($query){
+            $query->whereNull('collection_id');
+        });
+
+        $query->when($filters['desc'] ?? false, function ($query){
+            $query->latest()->get();
+        });
+
+        $query->when($filters['asc'] ?? false, function ($query){
+            $query->oldest()->get();
         });
     }
 

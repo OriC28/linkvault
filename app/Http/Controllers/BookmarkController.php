@@ -15,10 +15,9 @@ class BookmarkController extends Controller
     public function index(Request $request)
     {
         $bookmarks = $this->bookmarkRepository->getFilteredAndPaginated(
-            filters: $request->only(['is_favorite', 'without_collection']),
+            filters: $request->only(['is_favorite', 'without_collection', 'desc', 'asc']),
             perPage: 6
         );
-
         return view('bookmarks.index', compact('bookmarks'));
     }
 
@@ -41,6 +40,11 @@ class BookmarkController extends Controller
                $request->except('tags'),
                $request->tags
             );
-            return redirect()->route('bookmarks')->with('success', 'Guardado con éxito');
+            return redirect()->route('bookmarks.index')->with('success', 'Guardado con éxito');
+    }
+
+    public function destroy(int $id) {
+        $this->bookmarkRepository->delete($id);
+        return redirect()->route('bookmarks.index');
     }
 }

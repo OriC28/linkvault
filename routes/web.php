@@ -23,9 +23,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks');
+    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
     Route::get('/bookmarks/create', [BookmarkController::class, 'create'])->name('bookmarks.create');
-    Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmark.store');
+    Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::delete('/bookmark/destroy/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');
