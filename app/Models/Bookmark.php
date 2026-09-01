@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-#[Guarded(['id', 'user_id', 'collection_id'])]
+#[Guarded([])]
 class Bookmark extends Model
 {
     /** @use HasFactory<\Database\Factories\BookmarkFactory> */
@@ -19,7 +19,8 @@ class Bookmark extends Model
     protected function casts(): array
     {
         return [
-            'last_clicked_at' => 'datetime'
+            'last_clicked_at' => 'datetime',
+            'is_favorite' => 'boolean'
         ];
     }
 
