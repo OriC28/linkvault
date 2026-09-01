@@ -107,10 +107,17 @@
                 <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-1.5">
-                        <span
+                        @foreach ($bookmark->tags as $tag)
+                            <span
+                                class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">
+                                {{ $tag->name  }}
+                            </span>
+                        @endforeach
+
+                        {{-- <span
                             class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">PHP</span>
                         <span
-                            class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">Framework</span>
+                            class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">Framework</span> --}}
                     </div>
                     <div class="flex items-center gap-3 text-xs text-[#86868b]">
                         <span class="flex items-center gap-1" title="Visitas"><svg class="w-3.5 h-3.5" fill="none"
@@ -121,7 +128,11 @@
                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                 </path>
                             </svg>{{ $bookmark->click_count }}</span>
-                        <span>{{ $bookmark->last_clicked_at->diffForHumans() }}</span>
+                            @if ($bookmark->last_clicked_at)
+                                <span>{{ $bookmark->last_clicked_at->diffForHumans() }}</span>
+                            @else
+                                <span>Aún sin visitar</span>
+                            @endif
                     </div>
                 </div>
             </div>

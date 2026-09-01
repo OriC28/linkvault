@@ -15,13 +15,14 @@
     <!-- Form Card -->
     <div class="max-w-2xl mx-auto">
         <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/60 p-3 md:p-8">
-            <form>
+            <form method="POST" action="{{ route('bookmark.store') }}">
+                @csrf
                 <!-- URL Field -->
                 <div class="mb-3">
                     <label for="url" class="block text-sm font-medium text-[#1d1d1f] mb-1.5">URL <span
                             class="text-red-500">*</span></label>
                     <input type="url" id="url" name="url" placeholder="https://ejemplo.com/articulo"
-                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200">
+                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200" value="{{ old('url') }}">
                     <p class="mt-1.5 text-xs text-[#86868b]">Pegaremos el título automáticamente</p>
                 </div>
 
@@ -43,7 +44,7 @@
                 <div class="mb-3">
                     <label for="collection" class="block text-sm font-medium text-[#1d1d1f] mb-1.5">Colección</label>
                     <div class="relative">
-                        <select id="collection" name="collection"
+                        <select id="collection" name="collection_id"
                             class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 pr-10 text-[#1d1d1f] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200 appearance-none">
                             <option value="">Sin colección</option>
                             @if ($collections)
@@ -74,7 +75,8 @@
                             placeholder="Agregar etiqueta..."
                             x-init="
                                 new Tagify($el, {
-                                whitelist: ['PHP', 'Laravel', 'Tailwind', 'MySQL', 'JavaScript'],
+                                whitelist: {{ json_encode($tags) }},
+
                                 dropdown: {
                                     maxItems: 5,
                                     classname: 'tags-blue',
@@ -91,7 +93,7 @@
                 <div class="mb-4 flex items-center">
                     <label for="favorite-toggle" class="flex items-center cursor-pointer">
                         <div class="relative">
-                            <input type="checkbox" id="favorite-toggle" class="sr-only">
+                            <input type="checkbox" id="favorite-toggle" name="is_favorite" value="1" class="sr-only">
                             <div
                                 class="block bg-gray-200 w-11 h-6 rounded-full transition-colors duration-300 peer-checked:bg-[#007AFF]">
                             </div>
