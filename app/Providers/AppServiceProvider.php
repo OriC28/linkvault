@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\RepositoryInterface;
+use App\Repositories\BookmarkRepository;
 use App\Services\Contracts\SocialLoginServiceInterface;
 use App\Services\GoogleLoginService as ServicesGoogleLoginService;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +18,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             SocialLoginServiceInterface::class,
-            ServicesGoogleLoginService::class
+            ServicesGoogleLoginService::class,
+        );
+
+        $this->app->bind(
+            RepositoryInterface::class,
+            BookmarkRepository::class
         );
     }
 

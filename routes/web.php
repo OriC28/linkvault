@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks');
     Route::get('/bookmarks/create', [BookmarkController::class, 'create'])->name('bookmarks.create');
+    Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmark.store');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');
