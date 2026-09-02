@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
-    public function __construct(protected BookmarkRepository $bookmarkRepository){}
+    public function __construct(protected BookmarkRepository $bookmarkRepository) {}
 
     public function index(Request $request)
     {
@@ -35,15 +35,16 @@ class BookmarkController extends Controller
 
     public function store(StoreBookmarkRequest $request, CreateBookmarkWithTagsAction $createBookmarkWithTagsAction)
     {
-            $createBookmarkWithTagsAction(
-               $request->user(),
-               $request->except('tags'),
-               $request->tags
-            );
-            return redirect()->route('bookmarks.index')->with('success', 'Guardado con éxito');
+        $createBookmarkWithTagsAction(
+            $request->user(),
+            $request->except('tags'),
+            $request->tags
+        );
+        return redirect()->route('bookmarks.index')->with('success', 'Guardado con éxito');
     }
 
-    public function destroy(int $id) {
+    public function destroy(int $id)
+    {
         $this->bookmarkRepository->delete($id);
         return redirect()->route('bookmarks.index');
     }

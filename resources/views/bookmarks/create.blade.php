@@ -22,8 +22,12 @@
                     <label for="url" class="block text-sm font-medium text-[#1d1d1f] mb-1.5">URL <span
                             class="text-red-500">*</span></label>
                     <input type="url" id="url" name="url" placeholder="https://ejemplo.com/articulo"
-                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200" value="{{ old('url') }}">
+                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200"
+                        value="{{ old('url') }}">
                     <p class="mt-1.5 text-xs text-[#86868b]">Pegaremos el título automáticamente</p>
+                    @error('url')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Title Field -->
@@ -31,14 +35,21 @@
                     <label for="title" class="block text-sm font-medium text-[#1d1d1f] mb-1.5">Título <span
                             class="text-red-500">*</span></label>
                     <input type="text" id="title" name="title" placeholder="Título del marcador"
+                        value="{{ old('title') }}"
                         class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200">
+                    @error('title')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Description Field -->
                 <div class="mb-3">
                     <label for="description" class="block text-sm font-medium text-[#1d1d1f] mb-1.5">Descripción</label>
                     <textarea id="description" name="description" rows="3" placeholder="Agrega una nota o descripción..."
-                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200 resize-none"></textarea>
+                        class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200 resize-none">{{ old('description') }}</textarea>
+                    @error('description')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
                 <!-- Collection Field -->
                 <div class="mb-3">
@@ -49,7 +60,9 @@
                             <option value="">Sin colección</option>
                             @if ($collections)
                                 @foreach ($collections as $coll)
-                                    <option value="{{ $coll->id }}">{{ $coll->name }}</option>
+                                    <option value="{{ $coll->id }}"
+                                        {{ old('collection_id') == $coll->id ? 'selected' : '' }}>{{ $coll->name }}
+                                    </option>
                                 @endforeach
                             @endif
                         </select>
@@ -60,6 +73,9 @@
                             </svg>
                         </div>
                     </div>
+                    @error('collection_id')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Tags Field -->
@@ -68,13 +84,8 @@
                     <div
                         class="w-full min-h-11.5 bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-1.5 flex flex-wrap gap-1.5 items-center focus-within:ring-2 focus-within:ring-[#007AFF]/30 focus-within:border-[#007AFF] transition-all duration-200">
                         <!-- Input -->
-                        <input
-                            type="text"
-                            name="tags"
-                            id="tags-input"
-                            placeholder="Agregar etiqueta..."
-                            x-init="
-                                new Tagify($el, {
+                        <input type="text" name="tags" id="tags-input" placeholder="Agregar etiqueta..."
+                            value="{{ old('tags') }}" x-init="new Tagify($el, {
                                 whitelist: {{ json_encode($tags) }},
                                 maxTags: 3,
                                 dropdown: {
@@ -84,16 +95,20 @@
                                     closeOnSelect: false
                                 }
                             })"
-                            class="flex-1 bg-transparent min-w-30 px-2 text-sm placeholder-[#86868b] outline-none"
-                        >
+                            class="flex-1 bg-transparent min-w-30 px-2 text-sm placeholder-[#86868b] outline-none">
                     </div>
+                    @error('tags')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Favorite Toggle -->
                 <div class="mb-4 flex items-center">
                     <label for="favorite-toggle" class="flex items-center cursor-pointer">
                         <div class="relative">
-                            <input type="checkbox" id="favorite-toggle" name="is_favorite" value="1" class="sr-only">
+                            <input type="hidden" name="is_favorite" value="0">
+                            <input type="checkbox" id="favorite-toggle" name="is_favorite" value="1" class="sr-only"
+                                @checked(old('is_favorite', false))>
                             <div
                                 class="block bg-gray-200 w-11 h-6 rounded-full transition-colors duration-300 peer-checked:bg-[#007AFF]">
                             </div>
@@ -112,6 +127,9 @@
                             transform: translateX(1.25rem);
                         }
                     </style>
+                    @error('is_favorite')
+                        <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Buttons -->
