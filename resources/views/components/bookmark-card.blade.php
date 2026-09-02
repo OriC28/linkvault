@@ -15,7 +15,7 @@
             @endif
             <span class="text-xs text-[#86868b] truncate">{{ $bookmark->url }}</span>
         </div>
-        <div x-data="{ open: false }"  class="flex items-center gap-1 shrink-0 relative">
+        <div x-data="{ open: false }" class="flex items-center gap-1 shrink-0 relative">
             <a aria-label="Favorito" @class([
                 'p-1 cursor-pointer',
                 'text-yellow-400' => $bookmark->is_favorite,
@@ -36,8 +36,8 @@
                     </path>
                 </svg>
                 <!-- Dropdown Options -->
-                <div x-show="open" x-cloak>
-                     <x-dropdown-menu :id="$bookmark->id" :title="$bookmark->title" />
+                <div x-show="open" x-cloak @click.away="open = false">
+                    <x-dropdown-menu :id="$bookmark->id" :title="$bookmark->title" />
                 </div>
             </button>
         </div>
