@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Interfaces\RepositoryInterface;
+use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\BookmarkRepository;
 use App\Services\Contracts\SocialLoginServiceInterface;
 use App\Services\GoogleLoginService as ServicesGoogleLoginService;
