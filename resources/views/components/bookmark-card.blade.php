@@ -1,6 +1,6 @@
 @props(['bookmark'])
 
-<div
+<div x-data="{ open: false }" :key="{{ $bookmark->id }}"
     class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-gray-200/60 hover:shadow-md transition-all duration-300 p-5 flex flex-col h-full">
     <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2 overflow-hidden">
@@ -15,7 +15,7 @@
             @endif
             <span class="text-xs text-[#86868b] truncate">{{ $bookmark->url }}</span>
         </div>
-        <div x-data="{ open: false }" class="flex items-center gap-1 shrink-0 relative">
+        <div class="flex items-center gap-1 shrink-0 relative">
             <a aria-label="Favorito" @class([
                 'p-1 cursor-pointer',
                 'text-yellow-400' => $bookmark->is_favorite,
@@ -35,11 +35,11 @@
                         d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
                     </path>
                 </svg>
-                <!-- Dropdown Options -->
-                <div x-show="open" x-cloak @click.away="open = false">
-                    <x-dropdown-menu :id="$bookmark->id" :title="$bookmark->title" />
-                </div>
             </button>
+            <!-- Dropdown Options -->
+            <div x-show="open" x-cloak @click.away="open = false">
+                <x-dropdown-menu :id="$bookmark->id" :title="$bookmark->title" :url="$bookmark->url" />
+            </div>
         </div>
     </div>
     <h3 class="text-base font-medium text-[#1d1d1f] mb-1 line-clamp-2">{{ $bookmark->title }}</h3>

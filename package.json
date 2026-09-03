@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "@yaireo/tagify": "^4.38.0",
-        "alpinejs": "^3.16.2"
+        "alpinejs": "^3.16.2",
+        "simple-notify": "^1.0.6"
     }
 }
