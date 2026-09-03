@@ -7,10 +7,11 @@ use App\Http\Requests\StoreBookmarkRequest;
 use App\Repositories\BookmarkRepository;
 use Illuminate\Http\Request;
 
-
 class BookmarkController extends Controller
 {
-    public function __construct(protected BookmarkRepository $bookmarkRepository) {}
+    public function __construct(
+        protected BookmarkRepository $bookmarkRepository
+    ) {}
 
     public function index(Request $request)
     {

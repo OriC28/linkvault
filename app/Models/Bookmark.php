@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Services\MetadataExtractorService;
+use Override;
 
 #[Guarded([])]
 class Bookmark extends Model
@@ -24,21 +26,30 @@ class Bookmark extends Model
         ];
     }
 
+    #[Override]
+    protected static function booted()
+    {
+        static::creating(function ($bookmark) {
+            $extractor = app(MetadataExtractorService::class);
+            $bookmark->favicon_url = $extractor->getFaviconToURL($bookmark->url);
+        });
+    }
+
     public function scopeFilter(Builder $query, array $filters)
     {
-        $query->when($filters['is_favorite'] ?? false, function ($query, $is_favorite_value){
+        $query->when($filters['is_favorite'] ?? false, function ($query, $is_favorite_value) {
             $query->where('is_favorite', $is_favorite_value);
         });
 
-        $query->when($filters['without_collection'] ?? false, function ($query){
+        $query->when($filters['without_collection'] ?? false, function ($query) {
             $query->whereNull('collection_id');
         });
 
-        $query->when($filters['desc'] ?? false, function ($query){
+        $query->when($filters['desc'] ?? false, function ($query) {
             $query->latest()->get();
         });
 
-        $query->when($filters['asc'] ?? false, function ($query){
+        $query->when($filters['asc'] ?? false, function ($query) {
             $query->oldest()->get();
         });
     }

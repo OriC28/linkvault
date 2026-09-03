@@ -6,6 +6,7 @@ use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\BookmarkRepository;
 use App\Services\Contracts\SocialLoginServiceInterface;
 use App\Services\GoogleLoginService as ServicesGoogleLoginService;
+use App\Services\MetadataExtractorService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             RepositoryInterface::class,
             BookmarkRepository::class
+        );
+
+        $this->app->bind(
+            MetadataExtractorService::class
         );
     }
 
