@@ -23,14 +23,11 @@
     <!-- Filter bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-[#d2d2d7] pb-4">
         <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-            <a href="{{ route('bookmarks.index', request()->only('page'))}}"
+            <a href="{{ route('bookmarks.index', request()->only('page')) }}"
                 class="px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap cursor-pointer
-                {{
-                    (empty(request()->query()) || array_keys(request()->query()) === ['page'] )
+                {{ empty(request()->query()) || array_keys(request()->query()) === ['page']
                     ? 'bg-[#1d1d1f] text-white'
-                    : 'text-[#86868b] hover:bg-gray-100'
-                }}"
-                >
+                    : 'text-[#86868b] hover:bg-gray-100' }}">
                 Sin filtros
             </a>
             <x-filter-button param="is_favorite" value="1">
@@ -49,12 +46,12 @@
                     asc: '{{ request()->fullUrlWithQuery(['asc' => '1', 'desc' => null]) }}'
                 }
             }">
-            <select x-model="selected" @change="window.location.href = urls[selected]"
-                class="flex items-center text-sm text-[#1d1d1f] hover:text-[#007AFF] transition-colors cursor-pointer px-4 py-2 hover:bg-gray-100 outline-0">
-                <option value="none">Ordenar por: Ninguno</option>
-                <option value="desc">Ordenar por: Más recientes</option>
-                <option value="asc">Ordenar por: Más antiguos</option>
-            </select>
+                <select x-model="selected" @change="window.location.href = urls[selected]"
+                    class="flex items-center text-sm text-[#1d1d1f] hover:text-[#007AFF] transition-colors cursor-pointer px-4 py-2 hover:bg-gray-100 outline-0">
+                    <option value="none">Ordenar por: Ninguno</option>
+                    <option value="desc">Ordenar por: Más recientes</option>
+                    <option value="asc">Ordenar por: Más antiguos</option>
+                </select>
             </div>
             <div class="flex items-center bg-white border border-[#d2d2d7] rounded-lg p-0.5">
                 <button class="p-1 bg-gray-100 rounded text-[#1d1d1f]" aria-label="Vista de cuadrícula">
@@ -75,7 +72,7 @@
         </div>
     </div>
     <!-- Bookmark grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 auto-rows-fr">
         <!-- Cards  -->
         @forelse ($bookmarks as $bookmark)
             <x-bookmark-card :bookmark="$bookmark" />
@@ -99,5 +96,5 @@
             class="w-8 h-8 rounded-lg text-[#1d1d1f] hover:bg-white transition-colors font-medium flex items-center justify-center">8</button>
         <button class="p-2 rounded-lg text-[#1d1d1f] hover:bg-white transition-colors">&raquo;</button> --}}
     </div>
-    <x-delete-modal/>
+    <x-delete-modal />
 @endsection

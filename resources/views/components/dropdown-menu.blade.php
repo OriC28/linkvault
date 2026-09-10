@@ -1,11 +1,11 @@
 @props(['id', 'title', 'url'])
 
-<div
-    class="absolute right-0 top-8 w-48 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-[#d2d2d7] py-1 z-10">
-    <a href="#" class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100">Editar</a>
-    <a href="#" class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100">Mover a colección</a>
+<div>
+    <a href="#" class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">Editar</a>
+    <a href="#" class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">Mover a
+        colección</a>
     <a @click="copyToClipboard('{{ $url }}'); open = false;"
-        class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100">
+        class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">
         Copiar URL
     </a>
     <div class="border-t border-gray-100 my-1"></div>

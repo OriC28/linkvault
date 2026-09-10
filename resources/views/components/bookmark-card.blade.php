@@ -37,17 +37,18 @@
                 </svg>
             </button>
             <!-- Dropdown Options -->
-            <div x-show="open" x-cloak @click.away="open = false">
+            <div x-show="open" x-cloak @click.away="open = false"
+                class="absolute right-0 top-8 w-48 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-[#d2d2d7] py-1 z-10">
                 <x-dropdown-menu :id="$bookmark->id" :title="$bookmark->title" :url="$bookmark->url" />
             </div>
         </div>
     </div>
     <h3 class="text-base font-medium text-[#1d1d1f] mb-1 line-clamp-2">{{ $bookmark->title }}</h3>
     <p class="text-xs text-[#86868b] truncate mb-2">{{ $bookmark->url }}</p>
-    <p class="text-sm text-[#86868b] line-clamp-2 mb-4 flex-1">{{ $bookmark->description }}</p>
+    <p class="text-sm text-[#86868b] line-clamp-2 mb-4 min-h-[2.5rem]">{{ $bookmark->description }}</p>
     <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
         <!-- Tags -->
-        <div class="flex flex-wrap gap-1.5">
+        <div class="flex flex-nowrap overflow-hidden gap-1.5 mr-2">
             @foreach ($bookmark->tags as $tag)
                 <span
                     class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">
@@ -65,9 +66,9 @@
                     </path>
                 </svg>{{ $bookmark->click_count }}</span>
             @if ($bookmark->last_clicked_at)
-                <span>{{ $bookmark->last_clicked_at->diffForHumans() }}</span>
+                <small class="text-xs">{{ $bookmark->last_clicked_at->diffForHumans() }}</small>
             @else
-                <span>Aún sin visitar</span>
+                <small class="text-xs">Aún sin visitar</small>
             @endif
         </div>
     </div>
