@@ -33,6 +33,10 @@ class BookmarkRepository implements RepositoryInterface
     public function update(array $data, int $id)
     {
         $boorkmark = $this->model->findOrFail($id);
+        $boorkmark->fill($data);
+        if (!$boorkmark->isDirty()) {
+            return false;
+        }
         $boorkmark->update($data);
         return $boorkmark;
     }
@@ -48,7 +52,7 @@ class BookmarkRepository implements RepositoryInterface
         return $user->bookmarks()->create($data);
     }
 
-    public function getFilteredAndPaginated(array $filters, int $perPage=5)
+    public function getFilteredAndPaginated(array $filters, int $perPage = 5)
     {
         return Bookmark::with('tags')->filter($filters)
             ->latest()

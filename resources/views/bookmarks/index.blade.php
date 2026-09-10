@@ -82,7 +82,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="flex justify-center items-center gap-1">
+    <div class ="flex justify-center items-center gap-1">
         {{ $bookmarks->links() }}
         {{--  <button class="p-2 rounded-lg text-[#86868b] hover:bg-white hover:text-[#1d1d1f] transition-colors"
             disabled>&laquo;</button>
@@ -97,4 +97,5 @@
         <button class="p-2 rounded-lg text-[#1d1d1f] hover:bg-white transition-colors">&raquo;</button> --}}
     </div>
     <x-delete-modal />
+    <x-bookmark-update-modal :collections="$collections" :tags="$tags" />
 @endsection

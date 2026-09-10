@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Bookmarks\CreateBookmarkWithTagsAction;
+use App\Actions\Bookmarks\UpdateBookmarkWithTagsAction;
+use App\Http\Requests\BookmarkRequests\UpdateBookmarkRequest;
 use App\Http\Requests\StoreBookmarkRequest;
+use App\Models\Bookmark;
 use App\Repositories\BookmarkRepository;
 use Illuminate\Http\Request;
 
@@ -19,7 +22,14 @@ class BookmarkController extends Controller
             filters: $request->only(['is_favorite', 'without_collection', 'desc', 'asc']),
             perPage: 6
         );
-        return view('bookmarks.index', compact('bookmarks'));
+        $collections = $request->user()->collections()->get();
+        $tags = $request->user()->tags->map(function ($tag) {
+            return [
+                'id' => $tag->id,
+                'value' => $tag->name,
+            ];
+        })->toArray();
+        return view('bookmarks.index', compact('bookmarks', 'collections', 'tags'));
     }
 
     public function create(Request $request)
@@ -42,6 +52,23 @@ class BookmarkController extends Controller
             $request->tags
         );
         return redirect()->route('bookmarks.index')->with('success', 'Guardado con éxito');
+    }
+
+    public function update(UpdateBookmarkRequest $request, int $id, UpdateBookmarkWithTagsAction $updateBookmarkWithTagsAction)
+    {
+        try {
+            $updateBookmarkWithTagsAction(
+                user: $request->user(),
+                bookmark_data: $request->except('tags'),
+                id: $id,
+                tags: $request->tags
+            );
+            return redirect()->route('bookmarks.index');
+        } catch (\Throwable $e) {
+            return redirect()->back()
+                ->with('warning', $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function destroy(int $id)

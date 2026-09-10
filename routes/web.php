@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookmarks/create', [BookmarkController::class, 'create'])->name('bookmarks.create');
     Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmark/destroy/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
+    Route::put('/bookmark/update/{id}', [BookmarkController::class, 'update'])->name('bookmarks.update');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');
@@ -37,5 +38,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/trash', [TrashController::class, 'index'])->name('trash');
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
-
-
