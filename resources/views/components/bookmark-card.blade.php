@@ -5,12 +5,12 @@
     <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2 overflow-hidden">
             @if ($bookmark->favicon_url)
-                <img src="{{ $bookmark->favicon_url }}" class="w-6 h-6 rounded-full">
+                <img src="{{ $bookmark->favicon_url }}" class="w-6 h-6 rounded-full object-cover object-center">
                 </img>
             @else
-                <div src="{{ $bookmark->favicon_url }}"
+                <div
                     class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-xs font-bold text-red-600 shrink-0">
-                    <span>L</span>
+                    <span>{{ $bookmark->present()->initialsURLName() }}</span>
                 </div>
             @endif
             <span class="text-xs text-[#86868b] truncate">{{ $bookmark->url }}</span>
