@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Presenters\BookmarkPresenter;
 use Illuminate\Database\Eloquent\Attributes\Guarded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,16 @@ class Bookmark extends Model
             $extractor = app(MetadataExtractorService::class);
             $bookmark->favicon_url = $extractor->getFaviconToURL($bookmark->url);
         });
+    }
+
+    /**
+     * Get presenter object to format user data for view.
+     *
+     * @return BookmarkPresenter
+     */
+    public function present(): BookmarkPresenter
+    {
+        return new BookmarkPresenter($this);
     }
 
     public function scopeFilter(Builder $query, array $filters)
