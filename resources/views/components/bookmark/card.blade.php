@@ -47,7 +47,7 @@
             <!-- Dropdown Options -->
             <div x-show="open" x-cloak @click.away="open = false"
                 class="absolute right-0 top-8 w-48 bg-white/90 backdrop-blur-xl rounded-xl shadow-lg border border-[#d2d2d7] py-1 z-10">
-                <x-dropdown-menu :bookmark="$bookmark" />
+                <x-bookmark.dropdown-menu :bookmark="$bookmark" />
             </div>
         </div>
     </div>

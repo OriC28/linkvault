@@ -132,9 +132,13 @@
                         <select name="collection_id" id="edit_bookmark_collection" x-model="form.collection_id"
                             class="w-full bg-white/70 rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-sm text-[#1d1d1f] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all">
                             <option value="">Sin colección</option>
-                            @foreach ($collections as $collection)
-                                <option value="{{ $collection->id }}">{{ $collection->name }}</option>
-                            @endforeach
+                            @if ($collections)
+                                @foreach ($collections as $coll)
+                                    <option value="{{ $coll->id }}"
+                                        {{ old('collection_id') == $coll->id ? 'selected' : '' }}>{{ $coll->name }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                         @error('collection_id')
                             <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>

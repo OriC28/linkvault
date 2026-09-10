@@ -75,7 +75,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 auto-rows-fr">
         <!-- Cards  -->
         @forelse ($bookmarks as $bookmark)
-            <x-bookmark-card :bookmark="$bookmark" />
+            <x-bookmark.card :bookmark="$bookmark" />
         @empty
             <span class="">No has registrado ningún marcador.</span>
         @endforelse
@@ -96,6 +96,6 @@
             class="w-8 h-8 rounded-lg text-[#1d1d1f] hover:bg-white transition-colors font-medium flex items-center justify-center">8</button>
         <button class="p-2 rounded-lg text-[#1d1d1f] hover:bg-white transition-colors">&raquo;</button> --}}
     </div>
-    <x-delete-modal />
-    <x-bookmark-update-modal :collections="$collections" :tags="$tags" />
+    <x-shared.delete-modal />
+    <x-bookmark.update-modal :collections="$collections" :tags="$tags" />
 @endsection
