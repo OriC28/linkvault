@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\Bookmarks\CreateBookmarkWithTagsAction;
 use App\Actions\Bookmarks\UpdateBookmarkWithTagsAction;
+use App\Http\Requests\BookmarkRequests\StoreBookmarkRequest;
 use App\Http\Requests\BookmarkRequests\UpdateBookmarkRequest;
-use App\Http\Requests\StoreBookmarkRequest;
-use App\Models\Bookmark;
+
 use App\Repositories\BookmarkRepository;
 use Illuminate\Http\Request;
 
