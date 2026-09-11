@@ -52,9 +52,9 @@ class BookmarkRepository implements RepositoryInterface
         return $user->bookmarks()->create($data);
     }
 
-    public function getFilteredAndPaginated(array $filters, int $perPage = 5)
+    public function getFilteredAndPaginated(User $user, array $filters, int $perPage = 5)
     {
-        return Bookmark::with('tags')->filter($filters)
+        return $user->bookmarks()->with('tags')->filter($filters)
             ->latest()
             ->paginate($perPage)
             ->withQueryString();

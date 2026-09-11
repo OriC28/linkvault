@@ -19,6 +19,7 @@ class BookmarkController extends Controller
     public function index(Request $request)
     {
         $bookmarks = $this->bookmarkRepository->getFilteredAndPaginated(
+            user: $request->user(),
             filters: $request->only(['is_favorite', 'without_collection', 'desc', 'asc']),
             perPage: 6
         );
