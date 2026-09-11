@@ -25,7 +25,7 @@
         Copiar URL
     </a>
     <div class="border-t border-gray-100 my-1"></div>
-    <a class="block px-4 py-2 text-sm text-[#FF3B30] hover:bg-red-50"
+    <a class="block px-4 py-2 text-sm text-[#FF3B30] hover:bg-red-50 cursor-pointer"
         @click="$dispatch(
             'delete-modal',
             {

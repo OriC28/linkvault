@@ -37,7 +37,7 @@
                 Sin colección
             </x-filter-button>
         </div>
-        <div class="flex items-center gap-4 shrink-0">
+        <div class="flex items-center shrink-0">
             <div x-data="{
                 selected: '{{ request('asc') ? 'asc' : (request('desc') ? 'desc' : 'none') }}',
                 urls: {
@@ -52,22 +52,6 @@
                     <option value="desc">Ordenar por: Más recientes</option>
                     <option value="asc">Ordenar por: Más antiguos</option>
                 </select>
-            </div>
-            <div class="flex items-center bg-white border border-[#d2d2d7] rounded-lg p-0.5">
-                <button class="p-1 bg-gray-100 rounded text-[#1d1d1f]" aria-label="Vista de cuadrícula">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                        </path>
-                    </svg>
-                </button>
-                <button class="p-1 text-[#86868b] hover:text-[#1d1d1f] rounded transition-colors"
-                    aria-label="Vista de lista">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
-                        </path>
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
