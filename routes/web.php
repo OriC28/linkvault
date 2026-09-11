@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ToggleBookmarkFavoriteController;
 use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmark/destroy/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::put('/bookmark/update/{id}', [BookmarkController::class, 'update'])->name('bookmarks.update');
+    Route::patch('/bookmark/{bookmark}/favorite', ToggleBookmarkFavoriteController::class)->name('bookmarks.is_favorite');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');

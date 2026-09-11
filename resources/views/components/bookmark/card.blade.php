@@ -16,9 +16,9 @@
             <span class="text-xs text-[#86868b] truncate">{{ $bookmark->url }}</span>
         </div>
         <div class="flex gap-2" x-cloak>
-            <form action="{{ route('bookmarks.update', $bookmark->id) }}" method="POST"
+            <form action="{{ route('bookmarks.is_favorite', $bookmark->id) }}" method="POST"
                 class="flex items-center gap-1 shrink-0 relative" x-data="{ isFavorite: {{ $bookmark->is_favorite ? 'true' : 'false' }} }">
-                @method('PUT')
+                @method('PATCH')
                 @csrf
 
                 <input type="hidden" name="is_favorite" value="0">
