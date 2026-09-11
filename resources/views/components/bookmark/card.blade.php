@@ -13,7 +13,8 @@
                     <span>{{ $bookmark->present()->initialsURLName() }}</span>
                 </div>
             @endif
-            <span class="text-xs text-[#86868b] truncate">{{ $bookmark->url }}</span>
+            <a href="{{ $bookmark->url }}" target="_blank"
+                class="text-xs text-[#86868b] truncate hover:text-[#007AFF] transition-all duration-75">{{ $bookmark->url }}</a>
         </div>
         <div class="flex gap-2" x-cloak>
             <form action="{{ route('bookmarks.is_favorite', $bookmark->id) }}" method="POST"
@@ -51,9 +52,12 @@
             </div>
         </div>
     </div>
-    <h3 class="text-base font-medium text-[#1d1d1f] mb-1 line-clamp-2">{{ $bookmark->title }}</h3>
-    <p class="text-xs text-[#86868b] truncate mb-2">{{ $bookmark->url }}</p>
-    <p class="text-sm text-[#86868b] line-clamp-2 mb-4 min-h-[2.5rem]">{{ $bookmark->description }}</p>
+    <h3 class="text-sm font-medium text-[#1d1d1f] mb-1 line-clamp-2">{{ $bookmark->title }}</h3>
+    <p class="text-xs text-[#007AFF] truncate mb-2">
+        <span class="font-medium">Colección: </span>
+        {{ $bookmark->collection->name ?? 'Sin colección' }}
+    </p>
+    <p class="text-xs text-[#86868b] line-clamp-2 mb-4 min-h-[2.5rem]">{{ $bookmark->description }}</p>
     <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
         <!-- Tags -->
         <div class="flex flex-nowrap overflow-hidden gap-1.5 mr-2">
