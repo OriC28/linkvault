@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CollectionRequests\StoreCollectionRequest;
 use App\Http\Requests\CollectionRequests\UpdateCollectionRequest;
+use App\Models\Bookmark;
 use App\Models\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,10 @@ class CollectionController extends Controller
 
     public function show(Collection $collection)
     {
-        return view('collections.show', compact('collection'));
+        $bookmarks = Bookmark::where('collection_id', $collection->id)
+            ->with('tags')
+            ->paginate(4);
+        return view('collections.show', compact('collection', 'bookmarks'));
     }
 
     public function update(UpdateCollectionRequest $request, Collection $collection)
