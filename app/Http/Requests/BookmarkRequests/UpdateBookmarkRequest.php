@@ -37,7 +37,7 @@ class UpdateBookmarkRequest extends FormRequest
                     }
                 }
             ],
-            'is_favorite' => 'boolean'
+            'is_favorite' => 'required|boolean'
         ];
     }
 

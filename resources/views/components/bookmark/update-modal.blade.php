@@ -4,8 +4,9 @@
 ])
 
 <div x-data="{
-    open: {{ $errors->any() ? 'true' : 'false' }},
-    actionUrl: '',
+    open: {{ $errors->any() || session('warning') ? 'true' : 'false' }},
+    actionUrl: '{{ session('edit_bookmark_id') ? url('/bookmarks/' . session('edit_bookmark_id')) : '' }}',
+    showWarning: {{ session('warning') ? 'true' : 'false' }},
     form: {
         title: '{{ old('title', '') }}',
         url: '{{ old('url', '') }}',
@@ -47,12 +48,13 @@
         }
         this.open = true;
     }
-}" @bookmark-update-modal.window="setup($event.detail)" @keydown.escape.window="open = false"
-    x-cloak>
+}" @bookmark-update-modal.window="setup($event.detail)"
+    @keydown.escape.window="open = false; showWarning = false" x-cloak>
     <!-- Backdrop & Modal Shell -->
     <div x-show="open" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
         <!-- Fondo desenfocado -->
-        <div x-show="open" x-transition.opacity @click="open = false" class="fixed inset-0 bg-black/40 backdrop-blur-sm">
+        <div x-show="open" x-transition.opacity @click="open = false; showWarning = false"
+            class="fixed inset-0 bg-black/40 backdrop-blur-sm">
         </div>
 
         <!-- Tarjeta del Modal -->
@@ -78,7 +80,7 @@
                         </h3>
                     </div>
 
-                    <button type="button" @click="open = false"
+                    <button type="button" @click="open = false; showWarning = false"
                         class="text-[#86868b] hover:text-[#1d1d1f] p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -89,11 +91,12 @@
 
                 <!-- Body / Form Fields -->
                 <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-                    @if (session('warning'))
+                    <!--  Warning general message  -->
+                    <template x-if="showWarning">
                         <div class="p-4 mb-4 text-sm text-yellow-800 bg-yellow-100 rounded-lg" role="alert">
                             {{ session('warning') }}
                         </div>
-                    @endif
+                    </template>
 
                     <!-- URL -->
                     <div>
@@ -177,18 +180,24 @@
                     </div>
 
                     <!-- Favorito Checkbox -->
-                    <label
-                        class="flex items-center gap-3 p-3 bg-gray-50/80 rounded-xl border border-gray-200/60 cursor-pointer select-none">
-                        <input type="checkbox" name="is_favorite" value="1" x-model="form.is_favorite"
-                            class="w-4 h-4 text-[#007AFF] rounded border-[#d2d2d7] focus:ring-[#007AFF] cursor-pointer">
-                        <span class="text-xs text-[#1d1d1f] font-medium flex items-center gap-1.5">
-                            Marcar como favorito
-                        </span>
-                    </label>
+                    <div>
+                        <label
+                            class="flex items-center gap-3 p-3 bg-gray-50/80 rounded-xl border border-gray-200/60 cursor-pointer select-none">
+                            <input type="hidden" name="is_favorite" value="0">
+                            <input type="checkbox" name="is_favorite" value="1" x-model="form.is_favorite"
+                                class="w-4 h-4 text-[#007AFF] rounded border-[#d2d2d7] focus:ring-[#007AFF] cursor-pointer">
+                            <span class="text-xs text-[#1d1d1f] font-medium flex items-center gap-1.5">
+                                Marcar como favorito
+                            </span>
+                        </label>
+                        @error('is_favorite')
+                            <p class="text-xs text-[#FF3B30] mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
                 <!-- Footer Actions -->
                 <div class="px-6 py-4 bg-gray-50/90 border-t border-[#d2d2d7]/60 flex justify-end gap-3">
-                    <button type="button" @click="open = false"
+                    <button type="button" @click="open = false; showWarning = false"
                         class="bg-white border border-[#d2d2d7] text-[#1d1d1f] text-sm font-medium rounded-xl px-4 py-2 hover:bg-gray-100 transition-all duration-200 cursor-pointer">
                         Cancelar
                     </button>

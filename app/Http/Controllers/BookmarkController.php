@@ -58,6 +58,7 @@ class BookmarkController extends Controller
     public function update(UpdateBookmarkRequest $request, int $id, UpdateBookmarkWithTagsAction $updateBookmarkWithTagsAction)
     {
         try {
+
             $updateBookmarkWithTagsAction(
                 user: $request->user(),
                 bookmark_data: $request->except('tags'),
@@ -68,6 +69,7 @@ class BookmarkController extends Controller
         } catch (\Throwable $e) {
             return redirect()->back()
                 ->with('warning', $e->getMessage())
+                ->with('edit_bookmark_id', $id)
                 ->withInput();
         }
     }
