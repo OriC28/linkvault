@@ -76,29 +76,39 @@
         <!-- Bookmarks List -->
         <div class="space-y-3 mb-8">
             @forelse ($bookmarks as $bookmark)
-                <div x-data="{
-                    isFavorite: {{ $bookmark->is_favorite ? 'true' : 'false' }}"
+                <div
                     class ="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm
                     hover:shadow-md transition-all duration-300 flex items-center gap-4">
-                    <img src="{{ $bookmark->favicon_url ?? '' }}"
-                        class="w-10 h-10 rounded-full bg-red-100 shrink-0 flex items-center justify-center text-red-600 font-bold text-lg">
-                    </img>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2 mb-1">
+                    @if ($bookmark->favicon_url)
+                        <img src="{{ $bookmark->favicon_url ?? '' }}"
+                            class="w-10 h-10 rounded-full bg-red-100 shrink-0 flex items-center justify-center text-red-600 font-bold text-lg">
+                        </img>
+                    @else
+                        <div
+                            class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-xs font-bold text-red-600 shrink-0">
+                            <span>{{ $bookmark->present()->initialsURLName() }}</span>
+                        </div>
+                    @endif
+                    <div>
+                        <div class="flex items-center gap-2 mb-1" class="flex-1 min-w-0">
                             <h3 class="font-medium text-[#1d1d1f] truncate">{{ $bookmark->title }}</h3>
-                            <svg :class="isFavorite ? 'text-yellow-400' : 'text-gray-400/70'"
-                                class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                            <svg @class([
+                                'w-4 h-4 fill-current shrink-0',
+                                'text-yellow-400' => $bookmark->is_favorite,
+                                'text-gray-400/70' => !$bookmark->is_favorite,
+                            ]) viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
                                 </path>
                             </svg>
                         </div>
+
                         <a href="{{ $bookmark->url }}" target="_blank"
                             class="text-sm text-[#86868b] hover:text-[#007AFF] truncate block mb-2">{{ $bookmark->url }}</a>
                         <div class="flex items-center gap-2 flex-wrap">
                             @foreach ($bookmark->tags as $tag)
                                 <span
-                                    class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium">{{ $tag->name }}</span>
+                                    class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">{{ $tag->name }}</span>
                             @endforeach
                         </div>
                     </div>
