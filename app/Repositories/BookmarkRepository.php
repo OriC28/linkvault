@@ -55,7 +55,6 @@ class BookmarkRepository implements RepositoryInterface
     public function getFilteredAndPaginated(User $user, array $filters, int $perPage = 5)
     {
         return $user->bookmarks()->with(['tags', 'collection'])->filter($filters)
-            ->latest()
             ->paginate($perPage)
             ->withQueryString();
     }

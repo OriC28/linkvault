@@ -28,7 +28,7 @@ class StoreBookmarkRequest extends FormRequest
             'url' => 'required|url|max:2048',
             'title' => 'required|string|max:100|min:3',
             'description' => 'nullable|string|max:255',
-            'collection_id' => 'required|exists:collections,id',
+            'collection_id' => 'nullable|exists:collections,id',
             'tags' => [
                 'required',
                 function ($attribute, $value, $fail) {

@@ -34,6 +34,10 @@ class Bookmark extends Model
             $extractor = app(MetadataExtractorService::class);
             $bookmark->favicon_url = $extractor->getFaviconToURL($bookmark->url);
         });
+
+        static::addGlobalScope('order_desc', function (Builder $builder) {
+            $builder->orderBy('created_at', 'desc');
+        });
     }
 
     /**
