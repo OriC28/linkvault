@@ -18,7 +18,12 @@
         })">
         Editar
     </a>
-    <a href="#" class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">Mover a
+    <a @click="$dispatch('move-bookmark-modal', {
+            actionUrl: '{{ route('bookmarks.collection_update', $bookmark) }}',
+            title: {{ json_encode($bookmark->title) }},
+            collection_id: {{ json_encode($bookmark->collection_id) }}
+        })"
+        class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">Mover a
         colección</a>
     <a @click="copyToClipboard('{{ $url }}'); open = false;"
         class="block px-4 py-2 text-sm text-[#1d1d1f] hover:bg-gray-100 cursor-pointer">

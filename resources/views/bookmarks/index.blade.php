@@ -82,4 +82,5 @@
     </div>
     <x-shared.delete-modal />
     <x-bookmark.update-modal :collections="$collections" :tags="$tags" />
+    <x-bookmark.move-to-collection-modal :collections="$collections" />
 @endsection
