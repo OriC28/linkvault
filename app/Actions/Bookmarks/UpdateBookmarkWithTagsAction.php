@@ -21,19 +21,13 @@ class UpdateBookmarkWithTagsAction
      * @param Collection $tags
      * @return Bookmark
      */
-    public function __invoke(User $user, array $bookmark_data, int $id, Collection $tags): Bookmark
+    public function __invoke(User $user, array $bookmark_data, int $id, Collection $tags)
     {
         return DB::transaction(
             function () use ($user, $bookmark_data, $id, $tags) {
                 $pivotData = [];
 
                 if (!empty($tags)) {
-
-                    $bookmark = $this->bookmarkRepository->update($bookmark_data, $id);
-
-                    if (!$bookmark) {
-                        throw new NoChangesDetectedException('No ingresaste datos nuevos.');
-                    }
 
                     foreach ($tags as $tag) {
                         if (isset($tag['id']) && $tag['id'] != null) {
@@ -48,9 +42,13 @@ class UpdateBookmarkWithTagsAction
                         }
                         $pivotData[] = $tagId;
                     }
-                    $bookmark->tags()->sync($pivotData);
 
-                    return $bookmark;
+                    $result = $this->bookmarkRepository->update($bookmark_data, $id);
+
+                    if (is_array($result) && $result['tags']->count() == collect($pivotData)->count()) {
+                        throw new NoChangesDetectedException('No ingresaste datos nuevos.');
+                    }
+                    $result['bookmark']->tags()->sync($pivotData);
                 }
             }
 

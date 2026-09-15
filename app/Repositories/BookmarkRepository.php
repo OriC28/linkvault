@@ -32,13 +32,13 @@ class BookmarkRepository implements RepositoryInterface
 
     public function update(array $data, int $id)
     {
-        $boorkmark = $this->model->findOrFail($id);
-        $boorkmark->fill($data);
-        if (!$boorkmark->isDirty()) {
-            return false;
+        $bookmark = $this->model->findOrFail($id);
+        $bookmark->fill($data);
+        if (!$bookmark->isDirty()) {
+            return ["bookmark" => $bookmark, "tags" => $bookmark->tags()];
         }
-        $boorkmark->update($data);
-        return $boorkmark;
+        $bookmark->update($data);
+        return $bookmark;
     }
 
     public function delete(int $id)

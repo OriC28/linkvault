@@ -57,6 +57,7 @@ class BookmarkController extends Controller
 
     public function update(UpdateBookmarkRequest $request, int $id, UpdateBookmarkWithTagsAction $updateBookmarkWithTagsAction)
     {
+        //dd($request->all());
         try {
 
             $updateBookmarkWithTagsAction(

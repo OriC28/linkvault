@@ -3,7 +3,7 @@
     'tags' => [],
 ])
 
-<div x-data="{
+<div data-old-tags="{{ old('tags') }}" x-data="{
     open: {{ $errors->any() || session('warning') ? 'true' : 'false' }},
     actionUrl: '{{ session('edit_bookmark_id') ? url('/bookmarks/' . session('edit_bookmark_id')) : '' }}',
     showWarning: {{ session('warning') ? 'true' : 'false' }},
@@ -29,6 +29,15 @@
                     closeOnSelect: false
                 },
             });
+
+            const oldTags = this.$el.dataset.oldTags;
+            if (oldTags) {
+                try {
+                    this.tagifyInstance.addTags(JSON.parse(oldTags));
+                } catch(e) {
+                    this.tagifyInstance.addTags(oldTags);
+                }
+            }
         }
     },
 
