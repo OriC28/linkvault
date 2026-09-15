@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/collections/store', [CollectionController::class, 'store'])->name('collections.store');
     Route::delete('/collections/destroy/{collection:slug}', [CollectionController::class, 'destroy'])->name('collections.destroy');
 
-    Route::get('/trash', [TrashController::class, 'index'])->name('trash');
+    Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
+    Route::patch('/trash/{type}/{combined_item}/restore', [TrashController::class, 'restore'])->name('trash.restore');
+
+
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
