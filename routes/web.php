@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LinkTrackerController;
 use App\Http\Controllers\MovingBookmarkToCollection;
 use App\Http\Controllers\ToggleBookmarkFavoriteController;
 use App\Http\Controllers\TrashController;
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/bookmark/update/{id}', [BookmarkController::class, 'update'])->name('bookmarks.update');
     Route::patch('/bookmark/{bookmark}/favorite', ToggleBookmarkFavoriteController::class)->name('bookmarks.is_favorite');
     Route::patch('/bookmark/{bookmark}/collection', MovingBookmarkToCollection::class)->name('bookmarks.collection_update');
+    Route::get('/bookmark/{bookmark}/go', LinkTrackerController::class)->name('bookmarks.go');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
     Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');

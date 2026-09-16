@@ -13,8 +13,9 @@
                     <span>{{ $bookmark->present()->initialsURLName() }}</span>
                 </div>
             @endif
-            <a href="{{ $bookmark->url }}" target="_blank"
-                class="text-xs text-[#86868b] truncate hover:text-[#007AFF] transition-all duration-75">{{ $bookmark->url }}</a>
+            <a href="{{ route('bookmarks.go', $bookmark->id) }}" target="_blank"
+                class="text-xs text-[#86868b] truncate hover:text-[#007AFF] transition-all duration-75"
+                @click="setTimeout(() => window.location.reload(), 500)">{{ $bookmark->url }}</a>
         </div>
         <div class="flex gap-2" x-cloak>
             <form action="{{ route('bookmarks.is_favorite', $bookmark->id) }}" method="POST"
