@@ -133,7 +133,21 @@
                     </button>
                 </div>
             @empty
-                <span>Esta colección no tiene ningún marcador. Agrega uno y vuelve.</span>
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="w-20 h-20 bg-gray-200/50 rounded-full flex items-center justify-center text-[#86868b] mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0z" />
+                            <path fill="currentColor"
+                                d="M18.975 7.425q.775.6.775 1.575t-.775 1.575L16.8 12.25q-.3.225-.675.2t-.65-.3q-.325-.325-.288-.763t.388-.712L17.75 9 12 4.55 10.35 5.8q-.3.225-.675.2t-.65-.3q-.325-.325-.288-.763t.388-.712l1.65-1.275q.55-.425 1.225-.425t1.225.425zM19.1 21.4l-3.3-3.3-2.575 2q-.55.425-1.225.425t-1.225-.425l-6.75-5.25q-.4-.3-.387-.787t.412-.788q.275-.2.6-.2t.6.2L12 18.5l2.35-1.825-1.75-1.7h.725l-.1.05q-.55.425-1.225.438t-1.225-.413l-5.75-4.475Q4.25 9.975 4.25 9t.775-1.575l.05-.05L2.1 4.425q-.3-.3-.312-.712T2.075 3t.713-.3.712.3l17 17q.275.275.275.7t-.275.7-.7.275-.7-.275m.875-8.125q.375.3.375.775t-.375.8l-.3.25q-.3.25-.675.225t-.65-.3q-.325-.325-.3-.788t.4-.737l.3-.225q.275-.2.613-.2t.612.2" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-[#1d1d1f] mb-2">La colección está vacía</h2>
+                    <p class="text-[#86868b] mb-6">Esta colección no tiene ningún marcador. Agrega uno y vuelve.</p>
+                    <a href="{{ route('bookmarks.index') }}"
+                        class="bg-white border border-[#d2d2d7] text-[#1d1d1f] font-medium rounded-xl px-5 py-2.5 hover:bg-gray-50 transition-all duration-200">
+                        Ir a marcadores
+                    </a>
+                </div>
             @endforelse
         </div>
 

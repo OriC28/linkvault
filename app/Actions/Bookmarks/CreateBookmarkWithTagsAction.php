@@ -26,29 +26,26 @@ class CreateBookmarkWithTagsAction
             function () use ($user, $bookmarkData, $tags) {
                 $pivotData = [];
 
-                if (!empty($tags)) {
+                $bookmark = $this->bookmarkRepository->createForUser($user, $bookmarkData);
 
-                    $bookmark = $this->bookmarkRepository->createForUser($user, $bookmarkData);
-
-                    foreach ($tags as $tag) {
-                        if (isset($tag['id']) && $tag['id'] != null) {
-                            $tagId = $tag['id'];
-                        } else {
-                            // Crear repository de Tag para esta logica
-                            $newTag = $user->tags()->create([
-                                'name' => $tag['value'],
-                                'slug' => Str::slug($tag['value'])
-                            ]);
-                            $tagId = $newTag->id;
-                        }
-                        $pivotData[] = $tagId;
+                foreach ($tags as $tag) {
+                    if (isset($tag['id']) && $tag['id'] != null) {
+                        $tagId = $tag['id'];
+                    } else {
+                        // Crear repository de Tag para esta logica
+                        $newTag = $user->tags()->create([
+                            'name' => $tag['value'],
+                            'slug' => Str::slug($tag['value'])
+                        ]);
+                        $tagId = $newTag->id;
                     }
-                    $bookmark->tags()->sync($pivotData);
-
-                    return $bookmark;
+                    $pivotData[] = $tagId;
                 }
-            }
+                $bookmark->tags()->sync($pivotData);
+                $bookmark->collection()->increment('bookmarks_count', 1);
 
+                return $bookmark;
+            }
         );
     }
 }

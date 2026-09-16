@@ -13,6 +13,7 @@ class MovingBookmarkToCollection extends Controller
     public function __invoke(MovingBookmarkToCollectionRequest $request, Bookmark $bookmark)
     {
         $bookmark->update(['collection_id' => $request->collection_id]);
+        $bookmark->collection()->increment('bookmarks_count', 1);
 
         return redirect()->route('bookmarks.index');
     }
