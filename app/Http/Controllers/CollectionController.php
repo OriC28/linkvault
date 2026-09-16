@@ -25,11 +25,13 @@ class CollectionController extends Controller
         return redirect()->route('collections.index');
     }
 
-    public function show(Collection $collection)
+    public function show(Request $request, Collection $collection)
     {
         $bookmarks = Bookmark::where('collection_id', $collection->id)
             ->with('tags')
-            ->paginate(4);
+            ->filter($request->only(['dateDesc', 'dateAsc', 'orderDesc', 'orderAsc']))
+            ->paginate(4)
+            ->withQueryString();
         return view('collections.show', compact('collection', 'bookmarks'));
     }
 

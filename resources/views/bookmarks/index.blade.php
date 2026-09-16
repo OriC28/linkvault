@@ -61,13 +61,28 @@
         @forelse ($bookmarks as $bookmark)
             <x-bookmark.card :bookmark="$bookmark" />
         @empty
-            <span class="">No has registrado ningún marcador.</span>
+            <div class="grid col-start-2 col-end-2">
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="w-20 h-20 bg-gray-200/50 rounded-full flex items-center justify-center text-[#86868b] mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M11 2C7.229 2 5.343 2 4.172 3.129C3 4.257 3 6.074 3 9.708v8.273c0 2.306 0 3.459.773 3.871c1.496.8 4.304-1.867 5.637-2.67c.773-.465 1.16-.698 1.59-.698s.817.233 1.59.698c1.333.803 4.14 3.47 5.637 2.67c.773-.412.773-1.565.773-3.871V12m2-10l-7 7m7 0l-7-7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-[#1d1d1f] mb-2">Sin marcadores</h2>
+                    <p class="text-[#86868b] mb-6">No has registrado ningún marcador.</p>
+                </div>
+            </div>
         @endforelse
     </div>
 
     <!-- Pagination -->
     <div class ="flex justify-center items-center gap-1">
-        {{ $bookmarks->links() }}
+        @if ($bookmarks->hasPages())
+            {{ $bookmarks->links() }}
+        @endif
         {{--  <button class="p-2 rounded-lg text-[#86868b] hover:bg-white hover:text-[#1d1d1f] transition-colors"
             disabled>&laquo;</button>
         <button class="w-8 h-8 rounded-lg bg-[#007AFF] text-white font-medium flex items-center justify-center">1</button>

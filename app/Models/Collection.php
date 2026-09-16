@@ -50,7 +50,7 @@ class Collection extends Model
     public function isPublicText(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['is_public'] ? 'Público' : 'Privado'
+            get: fn(mixed $value, array $attributes) => $attributes['is_public'] ? 'Público' : 'Privado'
         );
     }
 

@@ -67,6 +67,22 @@ class Bookmark extends Model
         $query->when($filters['asc'] ?? false, function ($query) {
             $query->oldest()->get();
         });
+
+        $query->when($filters['dateDesc'] ?? false, function ($query) {
+            $query->orderBy('title', 'desc')->get();
+        });
+
+        $query->when($filters['dateAsc'] ?? false, function ($query) {
+            $query->orderBy('title', 'asc')->get();
+        });
+
+        $query->when($filters['orderDesc'] ?? false, function ($query) {
+            $query->latest()->get();
+        });
+
+        $query->when($filters['orderAsc'] ?? false, function ($query) {
+            $query->oldest()->get();
+        });
     }
 
     public function user(): BelongsTo
