@@ -19,7 +19,7 @@ class UpdateBookmarkWithTagsAction
      * @param User $user
      * @param array $bookmark_data
      * @param Collection $tags
-     * @return Bookmark
+     * @return void
      */
     public function __invoke(User $user, array $bookmark_data, int $id, Collection $tags)
     {
@@ -27,31 +27,26 @@ class UpdateBookmarkWithTagsAction
             function () use ($user, $bookmark_data, $id, $tags) {
                 $pivotData = [];
 
-                if (!empty($tags)) {
-
-                    foreach ($tags as $tag) {
-                        if (isset($tag['id']) && $tag['id'] != null) {
-                            $tagId = $tag['id'];
-                        } else {
-                            // Crear repository de Tag para esta logica
-                            $newTag = $user->tags()->create([
-                                'name' => $tag['value'],
-                                'slug' => Str::slug($tag['value'])
-                            ]);
-                            $tagId = $newTag->id;
-                        }
-                        $pivotData[] = $tagId;
+                foreach ($tags as $tag) {
+                    if (isset($tag['id']) && $tag['id'] != null) {
+                        $tagId = $tag['id'];
+                    } else {
+                        $newTag = $user->tags()->create([
+                            'name' => $tag['value'],
+                            'slug' => Str::slug($tag['value'])
+                        ]);
+                        $tagId = $newTag->id;
                     }
+                    $pivotData[] = $tagId;
+                }
 
-                    $result = $this->bookmarkRepository->update($bookmark_data, $id);
+                $bookmark = $this->bookmarkRepository->update($bookmark_data, $id);
+                $changes = collect($bookmark->tags()->sync($pivotData));
 
-                    if (is_array($result) && $result['tags']->count() == collect($pivotData)->count()) {
-                        throw new NoChangesDetectedException('No ingresaste datos nuevos.');
-                    }
-                    $result['bookmark']->tags()->sync($pivotData);
+                if (!$bookmark->wasChanged() && $changes->flatten()->isEmpty()) {
+                    throw new NoChangesDetectedException('No ingresaste datos nuevos.');
                 }
             }
-
         );
     }
 }
