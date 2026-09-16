@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bookmark;
-use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -16,7 +14,7 @@ class TrashController extends Controller
         $bookmarks = $user->bookmarks()->with('collection')->onlyTrashed()->get();
         $collections = $user->collections()->onlyTrashed()->get();
 
-        $data = $bookmarks->concat($collections)->sortByDesc('deteled_at');
+        $data = $bookmarks->concat($collections)->sortByDesc('deleted_at');
 
         $perPage = 5;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
@@ -37,6 +35,14 @@ class TrashController extends Controller
     {
         if ($item) {
             $item->restore();
+            return redirect()->route('trash.index');
+        }
+    }
+
+    public function destroy(string $type, object $item)
+    {
+        if ($item) {
+            $item->forceDelete();
             return redirect()->route('trash.index');
         }
     }

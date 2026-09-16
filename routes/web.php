@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
     Route::patch('/trash/{type}/{combined_item}/restore', [TrashController::class, 'restore'])->name('trash.restore');
+    Route::delete('/trash/{type}/{combined_item}/destroy', [TrashController::class, 'destroy'])->name('trash.destroy');
 
 
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');

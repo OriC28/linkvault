@@ -58,7 +58,8 @@
                             <div class="p-2.5 bg-blue-100/80 rounded-lg text-[#007AFF] shrink-0">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                    </path>
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -83,10 +84,15 @@
                                     Restaurar
                                 </button>
                             </form>
-                            <button
-                                class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
-                                Eliminar
-                            </button>
+                            <form action="{{ route('trash.destroy', ['type' => $type, 'combined_item' => $item->id]) }}"
+                                method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @elseif ($item instanceof \App\Models\Collection)
@@ -96,7 +102,8 @@
                             <div class="p-2.5 bg-purple-100/80 rounded-lg text-purple-600 shrink-0">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                    </path>
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -120,10 +127,15 @@
                                     Restaurar
                                 </button>
                             </form>
-                            <button
-                                class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
-                                Eliminar
-                            </button>
+                            <form action="{{ route('trash.destroy', ['type' => $type, 'combined_item' => $item->id]) }}"
+                                method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @endif
