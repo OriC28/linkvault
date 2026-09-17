@@ -46,10 +46,11 @@
         </div>
 
         <!-- Trash List -->
-        <div class="space-y-3 mb-8">
+        <div class="space-y-3 mb-8" x-data>
             @forelse ($dataPaginated as $item)
                 @php
                     $type = strtolower(class_basename($item));
+                    $params = ['type' => $type, 'combined_item' => $item->id];
                 @endphp
                 @if ($item instanceof \App\Models\Bookmark)
                     <div
@@ -84,15 +85,18 @@
                                     Restaurar
                                 </button>
                             </form>
-                            <form action="{{ route('trash.destroy', ['type' => $type, 'combined_item' => $item->id]) }}"
-                                method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button
-                                    class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <button
+                                @click="$dispatch(
+                                        'delete-modal',
+                                        {
+                                            actionUrl: '{{ route('trash.destroy', $params) }}',
+                                            title: '¿Eliminar marcador permanentemente?',
+                                            message: '¿Estás seguro de eliminar «{{ addslashes($item->title) }}»? No podrá acceder a este marcador luego de su eliminación.'
+                                        }
+                                    )"
+                                class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
+                                Eliminar
+                            </button>
                         </div>
                     </div>
                 @elseif ($item instanceof \App\Models\Collection)
@@ -127,15 +131,18 @@
                                     Restaurar
                                 </button>
                             </form>
-                            <form action="{{ route('trash.destroy', ['type' => $type, 'combined_item' => $item->id]) }}"
-                                method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button
-                                    class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <button
+                                @click="$dispatch(
+                                        'delete-modal',
+                                        {
+                                            actionUrl: '{{ route('trash.destroy', $params) }}',
+                                            title: '¿Eliminar colección permanentemente?',
+                                            message: '¿Estás seguro de eliminar «{{ addslashes($item->name) }}»? Los marcadores no se borrarán, pero quedarán sin colección asignada.'
+                                        }
+                                    )"
+                                class="bg-white border border-[#d2d2d7] text-[#FF3B30] font-medium rounded-xl px-4 py-2 hover:bg-red-50 transition-all duration-200 text-sm cursor-pointer">
+                                Eliminar
+                            </button>
                         </div>
                     </div>
                 @endif
@@ -159,4 +166,5 @@
         </div>
         {{ $dataPaginated->links() }}
     </div>
+    <x-shared.delete-modal />
 @endsection
