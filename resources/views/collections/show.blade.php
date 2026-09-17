@@ -113,8 +113,9 @@
                                 </svg>
                             </div>
 
-                            <a href="{{ $bookmark->url }}" target="_blank"
-                                class="text-sm text-[#86868b] hover:text-[#007AFF] truncate block mb-2">{{ $bookmark->url }}</a>
+                            <a href="{{ route('bookmarks.go', $bookmark->id) }}" target="_blank"
+                                class="text-sm text-[#86868b] hover:text-[#007AFF] truncate block mb-2"
+                                @click="setTimeout(() => window.location.reload(), 500)">{{ $bookmark->url }}</a>
                             <div class="flex items-center gap-2 flex-wrap">
                                 @foreach ($bookmark->tags as $tag)
                                     <span
