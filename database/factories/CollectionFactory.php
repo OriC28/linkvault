@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
  */
 class CollectionFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -20,7 +19,7 @@ class CollectionFactory extends Factory
     public function definition(): array
     {
 
-        $name =  $this->faker->words(4, true);
+        $name = $this->faker->words(4, true);
 
         return [
             'user_id' => $this->faker->numberBetween(1, 2),
@@ -28,7 +27,7 @@ class CollectionFactory extends Factory
             'slug' => Str::slug($name),
             'description' => $this->faker->paragraph(),
             'is_public' => $this->faker->boolean(50),
-            'bookmarks_count' => $this->faker->numberBetween(10, 90),
+            'bookmarks_count' => 0,
             'sort_order' => $this->faker->numberBetween(1, 20),
         ];
     }

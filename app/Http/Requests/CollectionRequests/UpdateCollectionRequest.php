@@ -4,6 +4,7 @@ namespace App\Http\Requests\CollectionRequests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Override;
 
 class UpdateCollectionRequest extends FormRequest
@@ -24,7 +25,15 @@ class UpdateCollectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:4|max:100',
+            'name' => [
+                'required',
+                'string',
+                'min:4',
+                'max:100',
+                Rule::unique('collections', 'name')
+                    ->where('user_id', $this->user()->id)
+                    ->ignore($this->route('collection')),
+            ],
             'description' => 'nullable|string|max:255',
             'is_public' => 'boolean',
         ];
@@ -32,8 +41,6 @@ class UpdateCollectionRequest extends FormRequest
 
     /**
      * Custom error messages for each validation rules.
-     *
-     * @return array
      */
     #[Override]
     public function messages(): array

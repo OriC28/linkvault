@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\RepositoryInterface;
+use App\Models\Bookmark;
+use App\Models\Collection;
+use App\Observers\BookmarkObserver;
 use App\Repositories\BookmarkRepository;
+use App\Repositories\Contracts\RepositoryInterface;
 use App\Services\Contracts\SocialLoginServiceInterface;
 use App\Services\GoogleLoginService as ServicesGoogleLoginService;
 use App\Services\MetadataExtractorService;
@@ -39,17 +42,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(!app()->isProduction());
+        Bookmark::observe(BookmarkObserver::class);
+        Model::preventLazyLoading(! app()->isProduction());
 
         Route::bind('combined_item', function ($value) {
             $type = request()->route('type');
             $models = [
-                'bookmark'  => \App\Models\Bookmark::class,
-                'collection' => \App\Models\Collection::class,
+                'bookmark' => Bookmark::class,
+                'collection' => Collection::class,
             ];
 
-            if (!array_key_exists($type, $models)) {
-                throw new ModelNotFoundException();
+            if (! array_key_exists($type, $models)) {
+                throw new ModelNotFoundException;
             }
 
             return $models[$type]::withTrashed()->findOrFail($value);

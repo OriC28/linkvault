@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\BookmarkRequests\MovingBookmarkRequest;
+use App\Models\Bookmark;
+
+class MovingBookmarkController extends Controller
+{
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(MovingBookmarkRequest $request, Bookmark $bookmark)
+    {
+        $bookmark->update(['collection_id' => $request->collection_id]);
+
+        return redirect()->route('bookmarks.index');
+    }
+}

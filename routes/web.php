@@ -6,7 +6,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LinkTrackerController;
-use App\Http\Controllers\MovingBookmarkToCollection;
+use App\Http\Controllers\MovingBookmarkController;
 use App\Http\Controllers\ToggleBookmarkFavoriteController;
 use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/bookmark/destroy/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::put('/bookmark/update/{id}', [BookmarkController::class, 'update'])->name('bookmarks.update');
     Route::patch('/bookmark/{bookmark}/favorite', ToggleBookmarkFavoriteController::class)->name('bookmarks.is_favorite');
-    Route::patch('/bookmark/{bookmark}/collection', MovingBookmarkToCollection::class)->name('bookmarks.collection_update');
+    Route::patch('/bookmark/{bookmark}/collection', MovingBookmarkController::class)->name('bookmarks.collection_update');
     Route::get('/bookmark/{bookmark}/go', LinkTrackerController::class)->name('bookmarks.go');
 
     Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
@@ -44,7 +44,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
     Route::patch('/trash/{type}/{combined_item}/restore', [TrashController::class, 'restore'])->name('trash.restore');
     Route::delete('/trash/{type}/{combined_item}/destroy', [TrashController::class, 'destroy'])->name('trash.destroy');
-
 
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 });

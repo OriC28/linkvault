@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Override;
 
-class MovingBookmarkToCollectionRequest extends FormRequest
+class MovingBookmarkRequest extends FormRequest
 {
     protected $errorBag = 'movingBookmarkForm';
 
@@ -26,7 +26,7 @@ class MovingBookmarkToCollectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'collection_id' => 'nullable|exists:collections,id'
+            'collection_id' => 'nullable|exists:collections,id',
         ];
     }
 

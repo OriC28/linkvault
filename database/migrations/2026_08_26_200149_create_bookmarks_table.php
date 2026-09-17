@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('collection_id')->nullable()->constrained();
+            $table->foreignId('collection_id')->nullable()->constrained()->nullOnDelete();
             $table->string('url', 2048);
             $table->string('title', 255);
             $table->text('description')->nullable();

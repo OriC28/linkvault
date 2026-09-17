@@ -15,6 +15,7 @@ class CollectionController extends Controller
     {
         $user = $request->user();
         $collections = $user->collections()->paginate(6);
+
         return view('collections.index', compact('collections'));
     }
 
@@ -22,6 +23,7 @@ class CollectionController extends Controller
     {
         $user = $request->user();
         $user->collections()->create($request->validated());
+
         return redirect()->route('collections.index');
     }
 
@@ -32,18 +34,21 @@ class CollectionController extends Controller
             ->filter($request->only(['dateDesc', 'dateAsc', 'orderDesc', 'orderAsc']))
             ->paginate(4)
             ->withQueryString();
+
         return view('collections.show', compact('collection', 'bookmarks'));
     }
 
     public function update(UpdateCollectionRequest $request, Collection $collection)
     {
         $collection->update($request->validated());
-        return view('collections.show', compact('collection'));
+
+        return redirect()->route('collections.show', parameters: ['collection' => $collection]);
     }
 
     public function destroy(Collection $collection)
     {
         $collection->delete();
+
         return redirect()->route('collections.index');
     }
 }
