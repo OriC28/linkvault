@@ -56,6 +56,15 @@ class Bookmark extends Model
             $query->where('is_favorite', $is_favorite_value);
         });
 
+        $query->when(!empty($filters['search']), function ($query) use ($filters) {
+            $keyword = addcslashes($filters['search'], '%_');
+            $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'like', "%{$keyword}%")
+                  ->orWhere('url', 'like', "%{$keyword}%")
+                  ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        });
+
         $query->when($filters['without_collection'] ?? false, function ($query) {
             $query->whereNull('collection_id');
         });

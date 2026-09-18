@@ -10,8 +10,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-                <input type="text" placeholder="Buscar marcadores..."
-                    class="w-full bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] pl-9 pr-4 py-2.5 text-sm text-[#1d1d1f] placeholder-[#86868b] focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF] outline-none transition-all duration-200">
+                <x-search-bar placeholder="Buscar marcadores..." type="bookmarks" />
             </div>
             <a href="{{ route('bookmarks.create') }}"
                 class="shrink-0 bg-[#007AFF] text-white font-medium rounded-xl px-5 py-2.5 hover:bg-[#0056CC] transition-all duration-200 shadow-sm text-sm cursor-pointer">
