@@ -32,7 +32,15 @@
                 </div>
                 <h1 class="text-2xl font-semibold text-[#1d1d1f]">Papelera</h1>
             </div>
-            <button
+            <button x-data
+                @click="$dispatch(
+                    'delete-modal',
+                    {
+                        actionUrl: '{{ route('trash.empty') }}',
+                        title: '¿Desea vaciar la papelera?',
+                        message: '¿Estás seguro de eliminar «todos» los registros de la papelera? No podrá acceder a a ninguno de ellos tras su eliminación permanente.'
+                    }
+                )"
                 class="bg-[#FF3B30] text-white font-medium rounded-xl px-5 py-2.5 hover:bg-[#CC2F27] transition-all duration-200 self-start sm:self-auto flex items-center gap-2 cursor-pointer">
                 Vaciar papelera
             </button>

@@ -46,4 +46,29 @@ class TrashController extends Controller
             return redirect()->route('trash.index');
         }
     }
+
+    public function empty(Request $request)
+    {
+        $user = $request->user();
+
+        $collections_trashed_count = $user->collections()->onlyTrashed()->count();
+        $bookmarks_trashed_count = $user->bookmarks()->onlyTrashed()->count();
+
+        $user->collections()->onlyTrashed()->chunkById(1000, function ($collections) {
+            foreach ($collections as $coll) {
+                $coll->forceDelete();
+            }
+        });
+
+        $user->bookmarks()->onlyTrashed()->chunkById(1000, function ($bookmarks) {
+            foreach ($bookmarks as $book) {
+                $book->forceDelete();
+            }
+        });
+
+        return redirect()->route('trash.index')->with([
+            'collections_trashed' => $collections_trashed_count,
+            'bookmarks_trashed' => $bookmarks_trashed_count
+        ]);
+    }
 }
