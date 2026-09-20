@@ -18,7 +18,7 @@
                 @click="setTimeout(() => window.location.reload(), 500)">{{ $bookmark->url }}</a>
         </div>
         <div class="flex gap-2" x-cloak>
-            <form action="{{ route('bookmarks.is_favorite', $bookmark->id) }}" method="POST"
+            <form action="{{ route('bookmarks.favorite', $bookmark->id) }}" method="POST"
                 class="flex items-center gap-1 shrink-0 relative" x-data="{ isFavorite: {{ $bookmark->is_favorite ? 'true' : 'false' }} }">
                 @method('PATCH')
                 @csrf

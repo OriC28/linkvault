@@ -1,53 +1,56 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\ToggleBookmarkFavoriteController;
+use App\Http\Controllers\MovingBookmarkController;
+use App\Http\Controllers\LinkTrackerController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\LinkTrackerController;
-use App\Http\Controllers\MovingBookmarkController;
-use App\Http\Controllers\ToggleBookmarkFavoriteController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TrashController;
-use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
+    // Authentication routes
+    Route::get('/login', fn() => view('auth.login'))->name('login');
 
-    // Auth google routes
-    Route::get('/auth/redirect', [GoogleController::class, 'redirect'])->name('auth.redirect');
-    Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.callback');
+    Route::controller(GoogleController::class)->prefix('auth')->name('auth.')->group(function () {
+        Route::get('/redirect', 'redirect')->name('redirect');
+        Route::get('/google/callback', 'callback')->name('callback');
+    });
 });
 
 Route::middleware('auth')->group(function () {
+    // General routes
     Route::get('/search', SearchController::class)->name('search');
-    
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+    // Dashboard routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
-    Route::get('/bookmarks/create', [BookmarkController::class, 'create'])->name('bookmarks.create');
-    Route::post('/bookmark/store', [BookmarkController::class, 'store'])->name('bookmarks.store');
-    Route::delete('/bookmark/destroy/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
-    Route::put('/bookmark/update/{id}', [BookmarkController::class, 'update'])->name('bookmarks.update');
-    Route::patch('/bookmark/{bookmark}/favorite', ToggleBookmarkFavoriteController::class)->name('bookmarks.is_favorite');
-    Route::patch('/bookmark/{bookmark}/collection', MovingBookmarkController::class)->name('bookmarks.collection_update');
-    Route::get('/bookmark/{bookmark}/go', LinkTrackerController::class)->name('bookmarks.go');
+    // Bookmark routes
+    Route::resource('bookmarks', BookmarkController::class)->except(['show', 'edit']);
+    Route::prefix('bookmarks')->name('bookmarks.')->group(function () {
+        Route::patch('/{bookmark}/favorite', ToggleBookmarkFavoriteController::class)->name('favorite');
+        Route::patch('/{bookmark}/collection', MovingBookmarkController::class)->name('collection');
+        Route::get('/{bookmark}/go', LinkTrackerController::class)->name('go');
+    });
 
-    Route::get('/collections', [CollectionController::class, 'index'])->name('collections.index');
-    Route::get('/collections/show/{collection:slug}', [CollectionController::class, 'show'])->name('collections.show');
-    Route::put('/collections/show/{collection:slug}', [CollectionController::class, 'update'])->name('collections.update');
-    Route::post('/collections/store', [CollectionController::class, 'store'])->name('collections.store');
-    Route::delete('/collections/destroy/{collection:slug}', [CollectionController::class, 'destroy'])->name('collections.destroy');
+    // Collection routes
+    Route::resource('collections', CollectionController::class)->parameters([
+        'collection' => 'collection:slug'
+    ])->except(['edit', 'create']);
 
-    Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
-    Route::patch('/trash/{type}/{combined_item}/restore', [TrashController::class, 'restore'])->name('trash.restore');
-    Route::delete('/trash/{type}/{combined_item}/destroy', [TrashController::class, 'destroy'])->name('trash.destroy');
-    Route::delete('/trash/empty', [TrashController::class, 'empty'])->name('trash.empty');
-
-    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
+    // Trash routes
+    Route::controller(TrashController::class)->prefix('trash')->name('trash.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::delete('/', 'empty')->name('empty');
+        Route::patch('/{type}/{combined_item}', 'restore')->name('restore');
+        Route::delete('/{type}/{combined_item}', 'destroy')->name('destroy');
+    });
 });
