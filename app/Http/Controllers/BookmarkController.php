@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\SaveBookmarkWithTagsAction;
-use App\Exceptions\NoChangesDetectedException;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
+
 use App\Http\Requests\BookmarkRequests\StoreBookmarkRequest;
 use App\Http\Requests\BookmarkRequests\UpdateBookmarkRequest;
+use App\Exceptions\NoChangesDetectedException;
+use App\Actions\SaveBookmarkWithTagsAction;
 use App\Models\Bookmark;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
-    use AuthorizesRequests;
 
     public function index(Request $request)
     {
@@ -50,7 +50,7 @@ class BookmarkController extends Controller
 
     public function update(UpdateBookmarkRequest $request, Bookmark $bookmark, SaveBookmarkWithTagsAction $saveWithTagsAction)
     {
-        $this->authorize('update', $bookmark);
+        Gate::authorize('update', $bookmark);
         try {
 
             $saveWithTagsAction(
@@ -70,7 +70,7 @@ class BookmarkController extends Controller
 
     public function destroy(Bookmark $bookmark)
     {
-        $this->authorize('delete', $bookmark);
+        Gate::authorize('delete', $bookmark);
         $bookmark->delete();
         return redirect()->route('bookmarks.index');
     }
