@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
+use Spatie\Sluggable\Attributes\Sluggable;
 use Override;
 
+#[Sluggable(from: 'name', to: 'slug')]
 #[Fillable(['name', 'description', 'is_public'])]
 class Collection extends Model
 {
@@ -28,29 +29,18 @@ class Collection extends Model
     }
 
     #[Override]
-    protected function casts(): array
-    {
-        return [
-            'created_at' => 'datetime',
-        ];
-    }
-
-    #[Override]
     protected static function booted()
     {
         static::creating(function ($collection) {
             $maxOrder = static::max('sort_order');
-
             $collection->sort_order = ($maxOrder ?? 0) + 1;
-
-            $collection->slug = Str::slug($collection->name);
         });
     }
 
     public function isPublicText(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['is_public'] ? 'Público' : 'Privado'
+            get: fn(mixed $value, array $attributes) => $attributes['is_public'] ? 'Público' : 'Privado'
         );
     }
 

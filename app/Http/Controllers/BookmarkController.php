@@ -20,7 +20,8 @@ class BookmarkController extends Controller
         $user = $request->user();
 
         $bookmarks = $user->bookmarks()->filteredAndPaginated(
-            filters: $request->only(['is_favorite', 'without_collection', 'recent', 'oldest'])
+            filters: $request->only(['is_favorite', 'without_collection', 'recent', 'oldest']),
+            relations: ['tags', 'collection']
         );
         $collections = $user->collections()->get();
         $tags = $user->present()->tagsWithId();

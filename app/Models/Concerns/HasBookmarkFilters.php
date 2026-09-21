@@ -41,15 +41,17 @@ trait HasBookmarkFilters
             $query->orderBy('title', 'asc');
         });
     }
-    public function scopeFilteredAndPaginated(Builder $query, array $filters, int $perPage = 6)
+    public function scopeFilteredAndPaginated(Builder $query, array $relations, array $filters, int $perPage = 6)
     {
         $order_filters = ['recent', 'oldest', 'alphaDesc', 'alphaAsc'];
         $hasOrderFilter = empty(array_intersect(array_keys($filters), $order_filters));
 
-        return $query->with(['tags', 'collection'])
+        return $query->with($relations)
             ->filter($filters)
             ->when($hasOrderFilter, fn($q) => $q->orderBy('created_at', 'desc'))
             ->paginate($perPage)
             ->withQueryString();
     }
+
+    public function scopeFilterBookmarksByCollection() {}
 }
