@@ -5,14 +5,18 @@ namespace App\Observers;
 use App\Models\Bookmark;
 use App\Models\Collection;
 
+use App\Services\MetadataExtractorService;
+
 class BookmarkObserver
 {
+    public function __construct(protected MetadataExtractorService $extractor) {}
     /**
      * Handle the Bookmark "created" event.
      */
     public function created(Bookmark $bookmark): void
     {
         $bookmark->collection?->increment('bookmarks_count', 1);
+        $bookmark->favicon_url = $this->extractor->getFaviconToURL($bookmark->url);
     }
 
     /**

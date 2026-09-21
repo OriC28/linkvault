@@ -31,7 +31,7 @@ class CollectionController extends Controller
     {
         $bookmarks = Bookmark::where('collection_id', $collection->id)
             ->with('tags')
-            ->filter($request->only(['dateDesc', 'dateAsc', 'orderDesc', 'orderAsc']))
+            ->filter($request->only(['recent', 'oldest', 'alphaDesc', 'alphaAsc']))
             ->paginate(4)
             ->withQueryString();
 

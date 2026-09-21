@@ -63,22 +63,22 @@
 
         <!-- Search & Filter Bar -->
         <div class="flex flex-col sm:flex-row gap-4 mb-6" x-data="{
-            selected: '{{ request('dateAsc') ? 'dateAsc' : (request('orderAsc') ? 'orderAsc' : (request('orderDesc') ? 'orderDesc' : 'dateDesc')) }}',
+            selected: '{{ request('oldest') ? 'oldest' : (request('alphaDesc') ? 'alphaDesc' : (request('alphaAsc') ? 'alphaAsc' : 'recent')) }}',
             urls: {
-                dateDesc: '{{ request()->fullUrlWithQuery(['dateDesc' => '1', 'dateAsc' => null, 'orderAsc' => null, 'orderDesc' => null]) }}',
-                dateAsc: '{{ request()->fullUrlWithQuery(['dateAsc' => '1', 'dateDesc' => null, 'orderAsc' => null, 'orderDesc' => null]) }}',
-                orderAsc: '{{ request()->fullUrlWithQuery(['orderAsc' => '1', 'dateDesc' => null, 'dateAsc' => null, 'orderDesc' => null]) }}',
-                orderDesc: '{{ request()->fullUrlWithQuery(['orderDesc' => '1', 'dateDesc' => null, 'dateAsc' => null, 'orderAsc' => null]) }}'
+                recent: '{{ request()->fullUrlWithQuery(['recent' => '1', 'oldest' => null, 'alphaDesc' => null, 'alphaAsc' => null]) }}',
+                oldest: '{{ request()->fullUrlWithQuery(['oldest' => '1', 'recent' => null, 'alphaDesc' => null, 'alphaAsc' => null]) }}',
+                alphaDesc: '{{ request()->fullUrlWithQuery(['alphaDesc' => '1', 'recent' => null, 'oldest' => null, 'alphaAsc' => null]) }}',
+                alphaAsc: '{{ request()->fullUrlWithQuery(['alphaAsc' => '1', 'recent' => null, 'oldest' => null, 'alphaDesc' => null]) }}'
             }
         }">
             <x-search-bar placeholder="Buscar en esta colección..." type="collection" :collection-id="$collection->id" :collection-slug="$collection->slug" />
 
             <select x-model="selected" @change="window.location.href = urls[selected]"
                 class="bg-white/60 backdrop-blur rounded-xl border border-[#d2d2d7] px-4 py-2.5 text-[#1d1d1f] outline-none focus:ring-2 focus:ring-[#007AFF]/30 focus:border-[#007AFF]">
-                <option value="dateDesc">Más recientes</option>
-                <option value="dateAsc">Más antiguos</option>
-                <option value="orderAsc">A-Z</option>
-                <option value="orderDesc">Z-A</option>
+                <option value="recent">Más recientes</option>
+                <option value="oldest">Más antiguos</option>
+                <option value="alphaAsc">A-Z</option>
+                <option value="alphaDesc">Z-A</option>
             </select>
         </div>
         <!-- Bookmarks List -->
