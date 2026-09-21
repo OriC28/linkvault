@@ -28,11 +28,6 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            RepositoryInterface::class,
-            BookmarkRepository::class
-        );
-
-        $this->app->bind(
             MetadataExtractorService::class
         );
     }
