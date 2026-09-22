@@ -4,6 +4,7 @@ namespace App\Http\Requests\BookmarkRequests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Override;
 
 class MovingBookmarkRequest extends FormRequest
@@ -26,7 +27,10 @@ class MovingBookmarkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'collection_id' => 'nullable|exists:collections,id',
+            'collection_id' => [
+                'nullable',
+                Rule::exists('collections', 'id')->where('user_id', $this->user()->id),
+            ]
         ];
     }
 
