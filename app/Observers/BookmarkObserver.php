@@ -10,13 +10,21 @@ use App\Services\MetadataExtractorService;
 class BookmarkObserver
 {
     public function __construct(protected MetadataExtractorService $extractor) {}
+
+    /**
+     * Handle the Bookmark "creating" event.
+     */
+    public function creating(Bookmark $bookmark): void
+    {
+        $bookmark->favicon_url = $this->extractor->getFaviconToURL($bookmark->url);
+    }
+
     /**
      * Handle the Bookmark "created" event.
      */
     public function created(Bookmark $bookmark): void
     {
         $bookmark->collection?->increment('bookmarks_count', 1);
-        $bookmark->favicon_url = $this->extractor->getFaviconToURL($bookmark->url);
     }
 
     /**

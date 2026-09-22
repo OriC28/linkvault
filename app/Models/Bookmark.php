@@ -12,6 +12,7 @@ use Override;
 
 use App\Models\Concerns\HasBookmarkFilters;
 use App\Presenters\BookmarkPresenter;
+use App\Services\MetadataExtractorService;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
 #[Fillable(['user_id', 'url', 'title', 'description', 'collection_id', 'is_favorite'])]
@@ -19,6 +20,8 @@ class Bookmark extends Model
 {
     /** @use HasFactory<\Database\Factories\BookmarkFactory> */
     use HasFactory, SoftDeletes, HasBookmarkFilters;
+
+    protected ?BookmarkPresenter $presenterInstance = null;
 
     protected function casts(): array
     {
@@ -35,7 +38,10 @@ class Bookmark extends Model
      */
     public function present(): BookmarkPresenter
     {
-        return new BookmarkPresenter($this);
+        if (!$this->presenterInstance) {
+            $this->presenterInstance = app(BookmarkPresenter::class, ['bookmark' => $this]);
+        }
+        return $this->presenterInstance;
     }
 
     public function user(): BelongsTo

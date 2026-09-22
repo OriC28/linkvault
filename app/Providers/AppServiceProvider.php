@@ -25,10 +25,6 @@ class AppServiceProvider extends ServiceProvider
             SocialLoginServiceInterface::class,
             ServicesGoogleLoginService::class,
         );
-
-        $this->app->bind(
-            MetadataExtractorService::class
-        );
     }
 
     /**

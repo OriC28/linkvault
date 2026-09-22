@@ -20,6 +20,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
+    protected ?UserPresenter $presenterInstance = null;
+
     /**
      * Get the attributes that should be cast.
      *
@@ -39,7 +41,10 @@ class User extends Authenticatable
      */
     public function present(): UserPresenter
     {
-        return new UserPresenter($this);
+        if (!$this->presenterInstance) {
+            $this->presenterInstance = new UserPresenter($this);
+        }
+        return $this->presenterInstance;
     }
 
     public function collections(): HasMany
