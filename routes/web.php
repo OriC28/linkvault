@@ -19,10 +19,11 @@ Route::middleware('guest')->group(function () {
     // Authentication routes
     Route::get('/login', fn() => view('auth.login'))->name('login');
 
-    Route::controller(GoogleController::class)->prefix('auth')->name('auth.')->group(function () {
-        Route::get('/redirect', 'redirect')->name('redirect');
-        Route::get('/google/callback', 'callback')->name('callback');
-    });
+    Route::middleware('throttle:10,1')->controller(GoogleController::class)
+        ->prefix('auth')->name('auth.')->group(function () {
+            Route::get('/redirect', 'redirect')->name('redirect');
+            Route::get('/google/callback', 'callback')->name('callback');
+        });
 });
 
 Route::middleware('auth')->group(function () {
