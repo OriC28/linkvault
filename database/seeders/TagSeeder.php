@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Collection;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CollectionSeeder extends Seeder
+class TagSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,7 +17,7 @@ class CollectionSeeder extends Seeder
         $users = User::all();
 
         foreach ($users as $user) {
-            Collection::factory(2)->create([
+            Tag::factory(5)->create([
                 'user_id' => $user->id
             ]);
         }

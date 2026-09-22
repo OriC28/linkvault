@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Collection;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,7 +23,7 @@ class CollectionFactory extends Factory
         $name = $this->faker->words(4, true);
 
         return [
-            'user_id' => $this->faker->numberBetween(1, 2),
+            'user_id' => User::factory(),
             'name' => $name,
             'slug' => Str::slug($name),
             'description' => $this->faker->paragraph(),

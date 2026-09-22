@@ -15,8 +15,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            UserSeeder::class,
+            TagSeeder::class,
             CollectionSeeder::class,
             BookmarkSeeder::class,
         ]);
+
+        $this->command->info('Base de datos poblada con éxito.');
     }
 }

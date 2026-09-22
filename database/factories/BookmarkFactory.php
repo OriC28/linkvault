@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Bookmark;
 use App\Models\Collection;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +20,8 @@ class BookmarkFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->numberBetween(1, 2),
-            'collection_id' => $this->faker->numberBetween(1, 2),
+            'user_id' => User::factory(),
+            'collection_id' => Collection::factory(),
             'url' => $this->faker->url(),
             'title' => $this->faker->words(4, true),
             'description' => $this->faker->paragraph(),
