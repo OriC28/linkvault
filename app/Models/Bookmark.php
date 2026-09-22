@@ -2,22 +2,26 @@
 
 namespace App\Models;
 
-use App\Presenters\BookmarkPresenter;
-use Illuminate\Database\Eloquent\Attributes\Guarded;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Services\MetadataExtractorService;
+use Illuminate\Database\Eloquent\Model;
 use Override;
 
-#[Guarded([])]
+use App\Models\Concerns\HasBookmarkFilters;
+use App\Presenters\BookmarkPresenter;
+use App\Services\MetadataExtractorService;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+
+#[Fillable(['user_id', 'url', 'title', 'description', 'collection_id', 'is_favorite'])]
 class Bookmark extends Model
 {
     /** @use HasFactory<\Database\Factories\BookmarkFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasBookmarkFilters;
+
+    protected ?BookmarkPresenter $presenterInstance = null;
 
     protected function casts(): array
     {
@@ -27,19 +31,6 @@ class Bookmark extends Model
         ];
     }
 
-    #[Override]
-    protected static function booted()
-    {
-        static::creating(function ($bookmark) {
-            $extractor = app(MetadataExtractorService::class);
-            $bookmark->favicon_url = $extractor->getFaviconToURL($bookmark->url);
-        });
-
-        static::addGlobalScope('order_desc', function (Builder $builder) {
-            $builder->orderBy('created_at', 'desc');
-        });
-    }
-
     /**
      * Get presenter object to format user data for view.
      *
@@ -47,51 +38,10 @@ class Bookmark extends Model
      */
     public function present(): BookmarkPresenter
     {
-        return new BookmarkPresenter($this);
-    }
-
-    public function scopeFilter(Builder $query, array $filters)
-    {
-        $query->when($filters['is_favorite'] ?? false, function ($query, $is_favorite_value) {
-            $query->where('is_favorite', $is_favorite_value);
-        });
-
-        $query->when(!empty($filters['search']), function ($query) use ($filters) {
-            $keyword = addcslashes($filters['search'], '%_');
-            $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', "%{$keyword}%")
-                  ->orWhere('url', 'like', "%{$keyword}%")
-                  ->orWhere('description', 'like', "%{$keyword}%");
-            });
-        });
-
-        $query->when($filters['without_collection'] ?? false, function ($query) {
-            $query->whereNull('collection_id');
-        });
-
-        $query->when($filters['desc'] ?? false, function ($query) {
-            $query->latest()->get();
-        });
-
-        $query->when($filters['asc'] ?? false, function ($query) {
-            $query->oldest()->get();
-        });
-
-        $query->when($filters['dateDesc'] ?? false, function ($query) {
-            $query->orderBy('title', 'desc')->get();
-        });
-
-        $query->when($filters['dateAsc'] ?? false, function ($query) {
-            $query->orderBy('title', 'asc')->get();
-        });
-
-        $query->when($filters['orderDesc'] ?? false, function ($query) {
-            $query->latest()->get();
-        });
-
-        $query->when($filters['orderAsc'] ?? false, function ($query) {
-            $query->oldest()->get();
-        });
+        if (!$this->presenterInstance) {
+            $this->presenterInstance = app(BookmarkPresenter::class, ['bookmark' => $this]);
+        }
+        return $this->presenterInstance;
     }
 
     public function user(): BelongsTo

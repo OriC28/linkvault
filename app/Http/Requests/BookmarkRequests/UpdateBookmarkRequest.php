@@ -28,7 +28,7 @@ class UpdateBookmarkRequest extends FormRequest
             'url' => 'nullable|url|max:2048',
             'title' => 'nullable|string|max:100|min:3',
             'description' => 'nullable|string|max:255',
-            'collection_id' => 'nullable|exists:collections,id',
+            'collection_id' => 'nullable|exists:collections,id,user_id,' . $this->user()->id,
             'tags' => [
                 'required',
                 function ($attribute, $value, $fail) {

@@ -38,18 +38,18 @@
         </div>
         <div class="flex items-center shrink-0">
             <div x-data="{
-                selected: '{{ request('asc') ? 'asc' : (request('desc') ? 'desc' : 'none') }}',
+                selected: '{{ request('oldest') ? 'oldest' : (request('recent') ? 'recent' : 'none') }}',
                 urls: {
                     none: '{{ route('bookmarks.index') }}',
-                    desc: '{{ request()->fullUrlWithQuery(['desc' => '1', 'asc' => null]) }}',
-                    asc: '{{ request()->fullUrlWithQuery(['asc' => '1', 'desc' => null]) }}'
+                    recent: '{{ request()->fullUrlWithQuery(['recent' => '1', 'oldest' => null]) }}',
+                    oldest: '{{ request()->fullUrlWithQuery(['oldest' => '1', 'recent' => null]) }}'
                 }
             }">
                 <select x-model="selected" @change="window.location.href = urls[selected]"
                     class="flex items-center text-sm text-[#1d1d1f] hover:text-[#007AFF] transition-colors cursor-pointer px-4 py-2 hover:bg-gray-100 outline-0">
                     <option value="none">Ordenar por: Ninguno</option>
-                    <option value="desc">Ordenar por: Más recientes</option>
-                    <option value="asc">Ordenar por: Más antiguos</option>
+                    <option value="recent">Ordenar por: Más recientes</option>
+                    <option value="oldest">Ordenar por: Más antiguos</option>
                 </select>
             </div>
         </div>

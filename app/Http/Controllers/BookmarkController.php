@@ -2,82 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Bookmarks\CreateBookmarkWithTagsAction;
-use App\Actions\Bookmarks\UpdateBookmarkWithTagsAction;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
+
 use App\Http\Requests\BookmarkRequests\StoreBookmarkRequest;
 use App\Http\Requests\BookmarkRequests\UpdateBookmarkRequest;
-
-use App\Repositories\BookmarkRepository;
-use Illuminate\Http\Request;
+use App\Exceptions\NoChangesDetectedException;
+use App\Actions\SaveBookmarkWithTagsAction;
+use App\Models\Bookmark;
 
 class BookmarkController extends Controller
 {
-    public function __construct(
-        protected BookmarkRepository $bookmarkRepository
-    ) {}
 
     public function index(Request $request)
     {
-        $bookmarks = $this->bookmarkRepository->getFilteredAndPaginated(
-            user: $request->user(),
-            filters: $request->only(['is_favorite', 'without_collection', 'desc', 'asc']),
-            perPage: 6
+
+        $user = $request->user();
+
+        $bookmarks = $user->bookmarks()->filteredAndPaginated(
+            filters: $request->only(['is_favorite', 'without_collection', 'recent', 'oldest']),
+            relations: ['tags', 'collection']
         );
-        $collections = $request->user()->collections()->get();
-        $tags = $request->user()->tags->map(function ($tag) {
-            return [
-                'id' => $tag->id,
-                'value' => $tag->name,
-            ];
-        })->toArray();
+        $collections = $user->collections()->get();
+        $tags = $user->present()->tagsWithId();
+
         return view('bookmarks.index', compact('bookmarks', 'collections', 'tags'));
     }
 
     public function create(Request $request)
     {
-        $collections = $request->user()->collections()->get();
-        $tags = $request->user()->tags->map(function ($tag) {
-            return [
-                'id' => $tag->id,
-                'value' => $tag->name,
-            ];
-        })->toArray();
+        $user = $request->user();
+        $collections = $user->collections()->get();
+        $tags = $user->present()->tagsWithId();
         return view('bookmarks.create', compact('collections', 'tags'));
     }
 
-    public function store(StoreBookmarkRequest $request, CreateBookmarkWithTagsAction $createBookmarkWithTagsAction)
+    public function store(StoreBookmarkRequest $request, SaveBookmarkWithTagsAction $saveWithTagsAction)
     {
-        $createBookmarkWithTagsAction(
-            $request->user(),
-            $request->except('tags'),
-            $request->tags
+        $saveWithTagsAction(
+            user: $request->user(),
+            bookmark: new Bookmark(),
+            data: $request->except('tags'),
+            tags: $request->tags
         );
         return redirect()->route('bookmarks.index')->with('success', 'Guardado con éxito');
     }
 
-    public function update(UpdateBookmarkRequest $request, int $id, UpdateBookmarkWithTagsAction $updateBookmarkWithTagsAction)
+    public function update(UpdateBookmarkRequest $request, Bookmark $bookmark, SaveBookmarkWithTagsAction $saveWithTagsAction)
     {
-        //dd($request->all());
+        Gate::authorize('update', $bookmark);
         try {
 
-            $updateBookmarkWithTagsAction(
+            $saveWithTagsAction(
                 user: $request->user(),
-                bookmark_data: $request->except('tags'),
-                id: $id,
+                bookmark: $bookmark,
+                data: $request->except('tags'),
                 tags: $request->tags
             );
             return redirect()->route('bookmarks.index');
-        } catch (\Throwable $e) {
+        } catch (NoChangesDetectedException  $e) {
             return redirect()->back()
                 ->with('warning', $e->getMessage())
-                ->with('edit_bookmark_id', $id)
+                ->with('edit_bookmark_id', $bookmark->id)
                 ->withInput();
         }
     }
 
-    public function destroy(int $id)
+    public function destroy(Bookmark $bookmark)
     {
-        $this->bookmarkRepository->delete($id);
+        Gate::authorize('delete', $bookmark);
+        $bookmark->delete();
         return redirect()->route('bookmarks.index');
     }
 }

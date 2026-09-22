@@ -67,7 +67,7 @@
                 Dashboard
             </a>
             <a href="{{ route('bookmarks.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('bookmarks.*') ? 'active' : 'text-[#86868b]' }}">
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('bookmarks.*') || (request()->routeIs('search') && request('type') === 'bookmarks') ? 'active' : 'text-[#86868b]' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -76,7 +76,7 @@
                 Marcadores
             </a>
             <a href="{{ route('collections.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('collections.*') ? 'active' : 'text-[#86868b]' }}">
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('collections.*') || (request()->routeIs('search') && request('type') === 'collection') ? 'active' : 'text-[#86868b]' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -114,14 +114,17 @@
                         <span class="text-xs text-[#86868b] truncate">{{ auth()->user()->email }}</span>
                     </div>
                 </div>
-                <a href="{{ route('logout') }}" aria-label="Cerrar sesión"
-                    class="p-2 text-[#86868b] hover:text-[#FF3B30] hover:bg-red-50 rounded-lg transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                    </svg>
-                </a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" title="Cerrar sesión"
+                        class="p-2 text-[#86868b] hover:text-[#FF3B30] hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                        </svg>
+                    </button>
+                </form>
             </div>
         </div>
     </aside>
@@ -154,6 +157,52 @@
         mobileMenuBtn.addEventListener('click', toggleMenu);
         mobileOverlay.addEventListener('click', toggleMenu);
     </script>
+
+    @if (session('error') || session('warning') || session('success') || session()->has('collections_trashed'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                @if (session('error'))
+                    new window.Notify({
+                        status: 'error',
+                        title: 'Error',
+                        text: '{{ session('error') }}',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
+
+                @if (session('warning'))
+                    new window.Notify({
+                        status: 'warning',
+                        title: 'Sin cambios realizados',
+                        text: '{{ session('warning') }}',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
+
+                @if (session()->has('collections_trashed'))
+                    new window.Notify({
+                        status: 'success',
+                        title: 'Papelera vaciada',
+                        text: 'Se eliminaron definitivamente {{ session('bookmarks_trashed') }} marcadores y {{ session('collections_trashed') }} colecciones.',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
+
+                @if (session('success'))
+                    new window.Notify({
+                        status: 'success',
+                        title: 'Éxito',
+                        text: '{{ session('success') }}',
+                        autoclose: true,
+                        autotimeout: 3000
+                    });
+                @endif
+            });
+        </script>
+    @endif
 </body>
 
 </html>

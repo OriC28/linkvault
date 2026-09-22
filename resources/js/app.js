@@ -22,5 +22,6 @@ window.copyToClipboard = function (url) {
         });
 };
 window.Tagify = Tagify;
+window.Notify = Notify;
 window.Alpine = Alpine;
 Alpine.start();

@@ -4,7 +4,7 @@
 ])
 
 <div data-old-tags="{{ old('tags') }}" x-data="{
-    open: {{ $errors->any() || session('warning') ? 'true' : 'false' }},
+    open: {{ (session('edit_bookmark_id') && $errors->any()) || session('warning') ? 'true' : 'false' }},
     actionUrl: '{{ session('edit_bookmark_id') ? url('/bookmarks/' . session('edit_bookmark_id')) : '' }}',
     showWarning: {{ session('warning') ? 'true' : 'false' }},
     form: {
@@ -34,7 +34,7 @@
             if (oldTags) {
                 try {
                     this.tagifyInstance.addTags(JSON.parse(oldTags));
-                } catch(e) {
+                } catch (e) {
                     this.tagifyInstance.addTags(oldTags);
                 }
             }
@@ -100,13 +100,6 @@
 
                 <!-- Body / Form Fields -->
                 <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-                    <!--  Warning general message  -->
-                    <template x-if="showWarning">
-                        <div class="p-4 mb-4 text-sm text-yellow-800 bg-yellow-100 rounded-lg" role="alert">
-                            {{ session('warning') }}
-                        </div>
-                    </template>
-
                     <!-- URL -->
                     <div>
                         <label for="edit_bookmark_url"

@@ -2,30 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+
+use App\Exceptions\TransactionFailedException;
+use App\Actions\EmptyAllRegistersAction;
+use App\Actions\GetMergedModelsAction;
+use App\Exceptions\NoChangesDetectedException;
 
 class TrashController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GetMergedModelsAction $getMergedModelsAction)
     {
-
-        $user = $request->user();
-        $bookmarks = $user->bookmarks()->with('collection')->onlyTrashed()->get();
-        $collections = $user->collections()->onlyTrashed()->get();
-
-        $data = $bookmarks->concat($collections)->sortByDesc('deleted_at');
-
-        $perPage = 5;
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = $data->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        $dataPaginated = new LengthAwarePaginator(
-            $currentItems,
-            $data->count(),
-            $perPage,
-            $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        $dataPaginated = $getMergedModelsAction(
+            user: $request->user()
         );
 
         return view('trash.index', compact('dataPaginated'));
@@ -33,42 +23,42 @@ class TrashController extends Controller
 
     public function restore(string $type, object $item)
     {
-        if ($item) {
-            $item->restore();
-            return redirect()->route('trash.index');
-        }
+        Gate::authorize('restore', $item);
+
+        $item->restore();
+        return redirect()->route('trash.index');
     }
 
     public function destroy(string $type, object $item)
     {
-        if ($item) {
-            $item->forceDelete();
-            return redirect()->route('trash.index');
-        }
+        Gate::authorize('forceDelete', $item);
+
+        $item->forceDelete();
+        return redirect()->route('trash.index');
     }
 
-    public function empty(Request $request)
+    public function empty(Request $request, EmptyAllRegistersAction $emptyAllRegistersAction)
     {
-        $user = $request->user();
+        try {
 
-        $collections_trashed_count = $user->collections()->onlyTrashed()->count();
-        $bookmarks_trashed_count = $user->bookmarks()->onlyTrashed()->count();
+            $trashed_count = $emptyAllRegistersAction(
+                user: $request->user()
+            );
 
-        $user->collections()->onlyTrashed()->chunkById(1000, function ($collections) {
-            foreach ($collections as $coll) {
-                $coll->forceDelete();
-            }
-        });
-
-        $user->bookmarks()->onlyTrashed()->chunkById(1000, function ($bookmarks) {
-            foreach ($bookmarks as $book) {
-                $book->forceDelete();
-            }
-        });
-
-        return redirect()->route('trash.index')->with([
-            'collections_trashed' => $collections_trashed_count,
-            'bookmarks_trashed' => $bookmarks_trashed_count
-        ]);
+            return redirect()->route('trash.index')->with([
+                'collections_trashed' => $trashed_count['collections'],
+                'bookmarks_trashed' => $trashed_count['bookmarks']
+            ]);
+        } catch (TransactionFailedException $e) {
+            return back()->with(
+                'error',
+                $e->getMessage()
+            );
+        } catch (NoChangesDetectedException $e) {
+            return back()->with(
+                'warning',
+                $e->getMessage()
+            );
+        }
     }
 }

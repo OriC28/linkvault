@@ -2,18 +2,17 @@
 
 namespace App\Providers;
 
-use App\Models\Bookmark;
-use App\Models\Collection;
-use App\Observers\BookmarkObserver;
-use App\Repositories\BookmarkRepository;
-use App\Repositories\Contracts\RepositoryInterface;
-use App\Services\Contracts\SocialLoginServiceInterface;
-use App\Services\GoogleLoginService as ServicesGoogleLoginService;
-use App\Services\MetadataExtractorService;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
+
+use App\Services\GoogleLoginService as ServicesGoogleLoginService;
+use App\Services\Contracts\SocialLoginServiceInterface;
+use App\Services\MetadataExtractorService;
+use App\Observers\BookmarkObserver;
+use App\Models\Collection;
+use App\Models\Bookmark;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,15 +24,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             SocialLoginServiceInterface::class,
             ServicesGoogleLoginService::class,
-        );
-
-        $this->app->bind(
-            RepositoryInterface::class,
-            BookmarkRepository::class
-        );
-
-        $this->app->bind(
-            MetadataExtractorService::class
         );
     }
 
@@ -47,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
 
         Route::bind('combined_item', function ($value) {
             $type = request()->route('type');
+            $user = request()->user();
             $models = [
                 'bookmark' => Bookmark::class,
                 'collection' => Collection::class,
@@ -56,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
                 throw new ModelNotFoundException;
             }
 
-            return $models[$type]::withTrashed()->findOrFail($value);
+            return $models[$type]::where('user_id', $user->id)->withTrashed()->findOrFail($value);
         });
     }
 }

@@ -38,8 +38,7 @@ class GoogleLoginService implements SocialLoginServiceInterface
             [
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
-                'avatar_url'=> $googleUser->getAvatar(),
-                '',
+                'avatar_url' => $googleUser->getAvatar(),
                 'last_login_at' => now()
             ]
         );
@@ -47,5 +46,3 @@ class GoogleLoginService implements SocialLoginServiceInterface
         return $user;
     }
 }
-
-?>
