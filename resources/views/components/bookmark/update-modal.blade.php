@@ -4,7 +4,7 @@
 ])
 
 <div data-old-tags="{{ old('tags') }}" x-data="{
-    open: {{ $errors->any() || session('warning') ? 'true' : 'false' }},
+    open: {{ (session('edit_bookmark_id') && $errors->any()) || session('warning') ? 'true' : 'false' }},
     actionUrl: '{{ session('edit_bookmark_id') ? url('/bookmarks/' . session('edit_bookmark_id')) : '' }}',
     showWarning: {{ session('warning') ? 'true' : 'false' }},
     form: {
@@ -34,7 +34,7 @@
             if (oldTags) {
                 try {
                     this.tagifyInstance.addTags(JSON.parse(oldTags));
-                } catch(e) {
+                } catch (e) {
                     this.tagifyInstance.addTags(oldTags);
                 }
             }

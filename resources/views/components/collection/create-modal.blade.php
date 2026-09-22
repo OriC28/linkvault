@@ -1,5 +1,5 @@
 <div x-data="{
-    open: {{ $errors->any() ? 'true' : 'false' }},
+    open: {{ $errors->has('name') || $errors->has('description') ? 'true' : 'false' }},
     isEdit: false,
     slug: '',
     name: '{{ old('name') }}',

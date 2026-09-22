@@ -67,7 +67,7 @@
                 Dashboard
             </a>
             <a href="{{ route('bookmarks.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('bookmarks.*') ? 'active' : 'text-[#86868b]' }}">
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('bookmarks.*') || (request()->routeIs('search') && request('type') === 'bookmarks') ? 'active' : 'text-[#86868b]' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -76,7 +76,7 @@
                 Marcadores
             </a>
             <a href="{{ route('collections.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('collections.*') ? 'active' : 'text-[#86868b]' }}">
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#86868b] hover:bg-gray-100 hover:text-[#1d1d1f] font-medium transition-colors {{ request()->routeIs('collections.*') || (request()->routeIs('search') && request('type') === 'collection') ? 'active' : 'text-[#86868b]' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
