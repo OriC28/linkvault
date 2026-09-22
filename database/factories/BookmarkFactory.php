@@ -21,7 +21,7 @@ class BookmarkFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'collection_id' => Collection::factory(),
+            'collection_id' => null,
             'url' => $this->faker->url(),
             'title' => $this->faker->words(4, true),
             'description' => $this->faker->paragraph(),

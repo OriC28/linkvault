@@ -37,7 +37,9 @@ class BookmarkObserver
             $oldCollectionId = $bookmark->getOriginal('collection_id');
 
             if ($oldCollectionId) {
-                Collection::where('id', $oldCollectionId)?->decrement('bookmarks_count', 1);
+                Collection::where('id', $oldCollectionId)
+                    ->where('bookmarks_count', '>', 0)
+                    ->decrement('bookmarks_count', 1);
             }
 
             if ($bookmark->collection_id) {
@@ -52,7 +54,10 @@ class BookmarkObserver
     public function deleted(Bookmark $bookmark): void
     {
         if (!$bookmark->isForceDeleting()) {
-            Collection::withTrashed()->where('id', $bookmark->collection_id)?->decrement('bookmarks_count', 1);
+            Collection::withTrashed()
+                ->where('id', $bookmark->collection_id)
+                ->where('bookmarks_count', '>', 0)
+                ->decrement('bookmarks_count', 1);
         }
     }
 

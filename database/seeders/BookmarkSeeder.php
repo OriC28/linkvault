@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bookmark;
-use App\Models\Tag;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+use App\Models\Bookmark;
+use App\Models\User;
 
 class BookmarkSeeder extends Seeder
 {
@@ -15,7 +14,7 @@ class BookmarkSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::with('tags')->get();
+        $users = User::with(['tags', 'collections'])->get();
 
         foreach ($users as $user) {
 
@@ -24,15 +23,28 @@ class BookmarkSeeder extends Seeder
             ]);
 
             $userTags = $user->tags;
+            $userCollections = $user->collections;
 
-            if ($userTags->isNotEmpty()) {
-                foreach ($bookmarks as $bookmark) {
+            foreach ($bookmarks as $index => $bookmark) {
 
+                if ($index < 7 && $userCollections->isNotEmpty()) {
+                    $bookmark->collection_id = $userCollections->random()->id;
+                    $bookmark->save();
+                }
+
+                if ($userTags->isNotEmpty()) {
                     $randomTagsIds = $userTags->random(rand(1, 3))->pluck('id')->toArray();
-
                     $bookmark->tags()->attach($randomTagsIds);
                 }
             }
+        }
+
+        // Sincronizar el conteo real de marcadores en las colecciones
+        $collections = \App\Models\Collection::withCount('bookmarks')->get();
+        foreach ($collections as $collection) {
+            \Illuminate\Support\Facades\DB::table('collections')
+                ->where('id', $collection->id)
+                ->update(['bookmarks_count' => $collection->bookmarks_count]);
         }
     }
 }
