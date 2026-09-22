@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\TransactionFailedException;
 use App\Actions\EmptyAllRegistersAction;
 use App\Actions\GetMergedModelsAction;
+use App\Exceptions\NoChangesDetectedException;
 
 class TrashController extends Controller
 {
@@ -51,6 +52,11 @@ class TrashController extends Controller
         } catch (TransactionFailedException $e) {
             return back()->with(
                 'error',
+                $e->getMessage()
+            );
+        } catch (NoChangesDetectedException $e) {
+            return back()->with(
+                'warning',
                 $e->getMessage()
             );
         }

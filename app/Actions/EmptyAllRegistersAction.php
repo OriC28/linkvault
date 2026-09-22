@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use Illuminate\Support\Facades\DB;
 
+use App\Exceptions\NoChangesDetectedException;
 use App\Exceptions\TransactionFailedException;
 use App\Models\User;
 
@@ -18,6 +19,10 @@ class EmptyAllRegistersAction
             function () use ($user, $bookmarks_to_trash, $collections_to_trash) {
                 $bookmarks_trashed = 0;
                 $collections_trashed = 0;
+
+                if ($bookmarks_to_trash === 0 && $collections_to_trash === 0) {
+                    throw new NoChangesDetectedException("No se detectó ningún registro para eliminar.");
+                }
 
                 $user->collections()->onlyTrashed()->chunkById(1000, function ($collections) use (&$collections_trashed) {
                     foreach ($collections as $coll) {

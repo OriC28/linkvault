@@ -158,40 +158,50 @@
         mobileOverlay.addEventListener('click', toggleMenu);
     </script>
 
-    @if(session('error') || session('success') || session()->has('collections_trashed'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            @if(session('error'))
-            new window.Notify({
-                status: 'error',
-                title: 'Error',
-                text: '{{ session("error") }}',
-                autoclose: true,
-                autotimeout: 4000
-            });
-            @endif
+    @if (session('error') || session('warning') || session('success') || session()->has('collections_trashed'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                @if (session('error'))
+                    new window.Notify({
+                        status: 'error',
+                        title: 'Error',
+                        text: '{{ session('error') }}',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
 
-            @if(session()->has('collections_trashed'))
-            new window.Notify({
-                status: 'success',
-                title: 'Papelera vaciada',
-                text: 'Se eliminaron definitivamente {{ session("bookmarks_trashed") }} marcadores y {{ session("collections_trashed") }} colecciones.',
-                autoclose: true,
-                autotimeout: 4000
-            });
-            @endif
+                @if (session('warning'))
+                    new window.Notify({
+                        status: 'warning',
+                        title: 'Sin cambios realizados',
+                        text: '{{ session('warning') }}',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
 
-            @if(session('success'))
-            new window.Notify({
-                status: 'success',
-                title: 'Éxito',
-                text: '{{ session("success") }}',
-                autoclose: true,
-                autotimeout: 3000
+                @if (session()->has('collections_trashed'))
+                    new window.Notify({
+                        status: 'success',
+                        title: 'Papelera vaciada',
+                        text: 'Se eliminaron definitivamente {{ session('bookmarks_trashed') }} marcadores y {{ session('collections_trashed') }} colecciones.',
+                        autoclose: true,
+                        autotimeout: 4000
+                    });
+                @endif
+
+                @if (session('success'))
+                    new window.Notify({
+                        status: 'success',
+                        title: 'Éxito',
+                        text: '{{ session('success') }}',
+                        autoclose: true,
+                        autotimeout: 3000
+                    });
+                @endif
             });
-            @endif
-        });
-    </script>
+        </script>
     @endif
 </body>
 

@@ -100,13 +100,6 @@
 
                 <!-- Body / Form Fields -->
                 <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-                    <!--  Warning general message  -->
-                    <template x-if="showWarning">
-                        <div class="p-4 mb-4 text-sm text-yellow-800 bg-yellow-100 rounded-lg" role="alert">
-                            {{ session('warning') }}
-                        </div>
-                    </template>
-
                     <!-- URL -->
                     <div>
                         <label for="edit_bookmark_url"
