@@ -52,6 +52,4 @@ trait HasBookmarkFilters
             ->paginate($perPage)
             ->withQueryString();
     }
-
-    public function scopeFilterBookmarksByCollection() {}
 }
