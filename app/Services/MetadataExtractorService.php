@@ -8,10 +8,14 @@ use Illuminate\Support\Uri;
 class MetadataExtractorService
 {
 
-    public function getFaviconToURL(string $url): string
+    public function getFaviconToURL(string $url): ?string
     {
-        $favicon = Favicon::fetch($url);
-        return $favicon->getFaviconUrl();
+        try {
+            $favicon = Favicon::fetch($url);
+            return $favicon ? $favicon->getFaviconUrl() : null;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function getDomainToURL(string $url): string
