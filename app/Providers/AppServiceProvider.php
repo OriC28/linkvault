@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
 
 use App\Services\GoogleLoginService as ServicesGoogleLoginService;
 use App\Services\Contracts\SocialLoginServiceInterface;
@@ -34,6 +35,17 @@ class AppServiceProvider extends ServiceProvider
     {
         Bookmark::observe(BookmarkObserver::class);
         Model::preventLazyLoading(! app()->isProduction());
+
+        $clearDashboardCache = function ($model) {
+            if ($model && $model->user_id) {
+                Cache::forget("dashboard_user_{$model->user_id}");
+            }
+        };
+
+        Bookmark::saved($clearDashboardCache);
+        Bookmark::deleted($clearDashboardCache);
+        Collection::saved($clearDashboardCache);
+        Collection::deleted($clearDashboardCache);
 
         Route::bind('combined_item', function ($value) {
             $type = request()->route('type');

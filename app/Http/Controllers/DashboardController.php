@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -11,32 +12,37 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        $user->loadCount([
-            'bookmarks as total_bookmarks',
-            'collections as total_collections',
-            'bookmarks as total_favorites' => fn($query) => $query->where('is_favorite', true)
-        ]);
+        $data = Cache::remember("dashboard_user_{$user->id}", 3600, function () use ($user) {
+            $user->loadCount([
+                'bookmarks as total_bookmarks',
+                'collections as total_collections',
+                'bookmarks as total_favorites' => fn($query) => $query->where('is_favorite', true)
+            ]);
 
-        $tags = $user->tags()->latest()->limit(10)->get();
-        $recent_bookmarks = $user->bookmarks()
-            ->with('tags')
-            ->latest()
-            ->limit(4)
-            ->get();
+            $tags = $user->tags()->latest()->limit(10)->get();
 
-        $start_week = Carbon::now()->startOfWeek();
-        $end_week = Carbon::now()->endOfWeek();
+            $recent_bookmarks = $user->bookmarks()
+                ->with('tags')
+                ->latest()
+                ->limit(4)
+                ->get();
 
-        $this_week = $user->bookmarks()->totalThisWeek([$start_week, $end_week])
-            + $user->collections()->totalThisWeek([$start_week, $end_week]);
+            $start_week = Carbon::now()->startOfWeek();
+            $end_week = Carbon::now()->endOfWeek();
 
-        return view('dashboard.index', [
-            'total_bookmarks' => $user->total_bookmarks,
-            'total_collections' => $user->total_collections,
-            'total_favorites' => $user->total_favorites,
-            'this_week' => $this_week,
-            'recent_bookmarks' => $recent_bookmarks,
-            'tags' => $tags
-        ]);
+            $this_week = $user->bookmarks()->totalThisWeek([$start_week, $end_week])
+                + $user->collections()->totalThisWeek([$start_week, $end_week]);
+
+            return [
+                'total_bookmarks' => $user->total_bookmarks,
+                'total_collections' => $user->total_collections,
+                'total_favorites' => $user->total_favorites,
+                'this_week' => $this_week,
+                'recent_bookmarks' => $recent_bookmarks,
+                'tags' => $tags
+            ];
+        });
+
+        return view('dashboard.index', $data);
     }
 }
