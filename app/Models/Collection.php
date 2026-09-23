@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,6 +44,12 @@ class Collection extends Model
             get: fn(mixed $value, array $attributes) => $attributes['is_public'] ? 'Público' : 'Privado'
         );
     }
+
+    public function scopeTotalThisWeek(Builder $builder, array $range_week)
+    {
+        return $builder->whereBetween('created_at', $range_week)->count();
+    }
+
 
     #[Override]
     public function getRouteKeyName()

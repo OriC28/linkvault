@@ -3,73 +3,52 @@
 @section('content')
     <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-semibold text-[#1d1d1f] tracking-tight">Buenos días, {{ auth()->user()->present()->fullName() }}</h1>
+            <h1 class="text-2xl font-semibold text-[#1d1d1f] tracking-tight">Buenos días,
+                {{ auth()->user()->present()->fullName() }}</h1>
             <p class="text-sm text-[#86868b] mt-1 flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Último acceso: {{auth()->user()->last_login_at->diffForHumans() }}
+                Último acceso: {{ auth()->user()->last_login_at->diffForHumans() }}
             </p>
         </div>
-
-        <button class="bg-[#007AFF] text-white font-medium rounded-xl px-5 py-2.5 hover:bg-[#0056CC] transition-all duration-200 shadow-sm flex items-center justify-center gap-2 w-full md:w-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Nuevo Marcador
-        </button>
     </header>
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6 mb-10">
         <!-- Stat 1 -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="text-xs text-[#86868b] uppercase tracking-wide font-medium">Total Marcadores</h3>
-                <div class="w-8 h-8 rounded-full bg-[#007AFF]/10 flex items-center justify-center text-[#007AFF]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-semibold text-[#1d1d1f]">247</p>
-        </div>
+        <x-dashboard.stat-card title="Total Marcadores" :quantity="$total_bookmarks" color="text-blue-500 bg-blue-500/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+            </svg>
+        </x-dashboard.stat-card>
         <!-- Stat 2 -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="text-xs text-[#86868b] uppercase tracking-wide font-medium">Colecciones</h3>
-                <div class="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-semibold text-[#1d1d1f]">12</p>
-        </div>
+        <x-dashboard.stat-card title="Colecciones" :quantity="$total_collections" color="text-purple-500 bg-purple-500/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+            </svg>
+        </x-dashboard.stat-card>
         <!-- Stat 3 -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="text-xs text-[#86868b] uppercase tracking-wide font-medium">Favoritos</h3>
-                <div class="w-8 h-8 rounded-full bg-[#FF9500]/10 flex items-center justify-center text-[#FF9500]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-semibold text-[#1d1d1f]">38</p>
-        </div>
+        <x-dashboard.stat-card title="Marcadores favoritos" :quantity="$total_favorites" color="text-yellow-500 bg-yellow-500/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+            </svg>
+        </x-dashboard.stat-card>
         <!-- Stat 4 -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300">
-            <div class="flex items-center justify-between mb-2">
-                <h3 class="text-xs text-[#86868b] uppercase tracking-wide font-medium">Esta semana</h3>
-                <div class="w-8 h-8 rounded-full bg-[#34C759]/10 flex items-center justify-center text-[#34C759]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-semibold text-[#34C759]">+15</p>
-        </div>
+        <x-dashboard.stat-card title="Esta semana" :quantity="$this_week" color="text-green-500 bg-green-500/10">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+            </svg>
+        </x-dashboard.stat-card>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -77,108 +56,55 @@
         <div class="lg:col-span-2">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold text-[#1d1d1f]">Agregados recientemente</h2>
-                <a href="#" class="text-sm text-[#007AFF] hover:underline font-medium">Ver todos &rarr;</a>
+                <a href="{{ route('bookmarks.index') }}" class="text-sm text-[#007AFF] hover:underline font-medium">Ver
+                    todos &rarr;</a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Bookmark 1 -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
-                    <div class="absolute top-4 right-4 text-[#FF9500]">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="flex items-start gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0 border border-red-100">
-                            <span class="text-red-500 font-bold text-lg">L</span>
+                @forelse ($recent_bookmarks as $bookmark)
+                    <div x-data="{ isFavorite: {{ $bookmark->is_favorite ? 'true' : 'false' }} }"
+                        class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
+                        <div :class="isFavorite ? 'text-yellow-400' : 'text-gray-400/70'" class="absolute top-4 right-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path fill-rule="evenodd"
+                                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </div>
-                        <div class="flex-1 pr-6">
-                            <h3 class="font-medium text-[#1d1d1f] line-clamp-1 group-hover:text-[#007AFF] transition-colors"><a href="#" class="focus:outline-none before:absolute before:inset-0">Documentación de Laravel 11</a></h3>
-                            <p class="text-sm text-[#86868b] truncate mt-0.5">laravel.com/docs</p>
+                        <div class="flex items-start gap-3 mb-3">
+                            @if ($bookmark->favicon_url)
+                                <img src="{{ $bookmark->favicon_url }}"
+                                    class="w-6 h-6 rounded-full object-cover object-center">
+                                </img>
+                            @else
+                                <div
+                                    class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-xs font-bold text-red-600 shrink-0">
+                                    <span>{{ $bookmark->present()->initialsURLName() }}</span>
+                                </div>
+                            @endif
+                            <div class="w-64 flex-1 pr-6">
+                                <h3
+                                    class="font-medium text-[#1d1d1f] line-clamp-1 group-hover:text-[#007AFF] transition-colors">
+                                    <a href="{{ route('bookmarks.go', $bookmark->id) }}" target="_blank"
+                                        class="focus:outline-none before:absolute before:inset-0">{{ $bookmark->title }}</a>
+                                </h3>
+                                <p class="text-sm text-[#86868b] truncate mt-0.5">{{ $bookmark->url }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-auto pt-3 flex items-center justify-between">
-                        <div class="flex flex-wrap gap-1.5">
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">PHP</span>
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">Framework</span>
-                        </div>
-                        <span class="text-xs text-[#86868b]">hace 2h</span>
-                    </div>
-                </div>
-
-                <!-- Bookmark 2 -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
-                    <div class="absolute top-4 right-4 text-[#d2d2d7] opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#86868b]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                        </svg>
-                    </div>
-                    <div class="flex items-start gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center shrink-0 border border-cyan-100">
-                            <span class="text-cyan-500 font-bold text-lg">T</span>
-                        </div>
-                        <div class="flex-1 pr-6">
-                            <h3 class="font-medium text-[#1d1d1f] line-clamp-1 group-hover:text-[#007AFF] transition-colors"><a href="#" class="focus:outline-none before:absolute before:inset-0">Guía de Tailwind CSS</a></h3>
-                            <p class="text-sm text-[#86868b] truncate mt-0.5">tailwindcss.com/docs</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto pt-3 flex items-center justify-between">
-                        <div class="flex flex-wrap gap-1.5">
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">CSS</span>
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">Frontend</span>
-                        </div>
-                        <span class="text-xs text-[#86868b]">hace 5h</span>
-                    </div>
-                </div>
-
-                <!-- Bookmark 3 -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
-                    <div class="absolute top-4 right-4 text-[#FF9500]">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="flex items-start gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
-                            <span class="text-blue-500 font-bold text-lg">P</span>
-                        </div>
-                        <div class="flex-1 pr-6">
-                            <h3 class="font-medium text-[#1d1d1f] line-clamp-1 group-hover:text-[#007AFF] transition-colors"><a href="#" class="focus:outline-none before:absolute before:inset-0">PostgreSQL Tutorial</a></h3>
-                            <p class="text-sm text-[#86868b] truncate mt-0.5">postgresqltutorial.com</p>
+                        <div class="mt-auto pt-3 flex items-center justify-between">
+                            <div class="flex flex-wrap gap-1.5">
+                                @foreach ($bookmark->tags as $tag)
+                                    <span
+                                        class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium uppercase">{{ $tag->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            <span class="text-xs text-[#86868b]">{{ $bookmark->created_at->diffForHumans() }}</span>
                         </div>
                     </div>
-                    <div class="mt-auto pt-3 flex items-center justify-between">
-                        <div class="flex flex-wrap gap-1.5">
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">Database</span>
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">SQL</span>
-                        </div>
-                        <span class="text-xs text-[#86868b]">hace 1d</span>
-                    </div>
-                </div>
-
-                <!-- Bookmark 4 -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
-                    <div class="absolute top-4 right-4 text-[#d2d2d7] opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#86868b]">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                        </svg>
-                    </div>
-                    <div class="flex items-start gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center shrink-0 border border-sky-100">
-                            <span class="text-sky-600 font-bold text-lg">D</span>
-                        </div>
-                        <div class="flex-1 pr-6">
-                            <h3 class="font-medium text-[#1d1d1f] line-clamp-1 group-hover:text-[#007AFF] transition-colors"><a href="#" class="focus:outline-none before:absolute before:inset-0">Docker para Desarrolladores</a></h3>
-                            <p class="text-sm text-[#86868b] truncate mt-0.5">docs.docker.com</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto pt-3 flex items-center justify-between">
-                        <div class="flex flex-wrap gap-1.5">
-                            <span class="inline-flex items-center bg-[#007AFF]/10 text-[#007AFF] rounded-full px-2.5 py-0.5 text-[11px] font-medium">DevOps</span>
-                        </div>
-                        <span class="text-xs text-[#86868b]">hace 2d</span>
-                    </div>
-                </div>
+                @empty
+                    <span>Sin marcadores registrados.</span>
+                @endforelse
             </div>
         </div>
 
@@ -188,29 +114,41 @@
             <div>
                 <h2 class="text-lg font-semibold text-[#1d1d1f] mb-4">Acciones rápidas</h2>
                 <div class="grid grid-cols-3 gap-3">
-                    <button class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md hover:border-[#007AFF]/30 transition-all duration-300 flex flex-col items-center justify-center gap-2 group">
-                        <div class="w-10 h-10 rounded-full bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center group-hover:bg-[#007AFF] group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <a href="{{ route('bookmarks.create') }}"
+                        class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md hover:border-[#007AFF]/30 transition-all duration-300 flex flex-col items-center justify-center gap-2 group">
+                        <div
+                            class="w-10 h-10 rounded-full bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center group-hover:bg-[#007AFF] group-hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
                         </div>
                         <span class="text-xs font-medium text-[#1d1d1f] text-center leading-tight">Nuevo<br>marcador</span>
-                    </button>
+                    </a>
 
-                    <button class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md hover:border-[#007AFF]/30 transition-all duration-300 flex flex-col items-center justify-center gap-2 group">
-                        <div class="w-10 h-10 rounded-full bg-gray-100 text-[#1d1d1f] flex items-center justify-center group-hover:bg-[#007AFF] group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                    <a href="{{ route('collections.index') }}"
+                        class="bg-white/80 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/60 shadow-sm hover:shadow-md hover:border-[#007AFF]/30 transition-all duration-300 flex flex-col items-center justify-center gap-2 group">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gray-100 text-[#1d1d1f] flex items-center justify-center group-hover:bg-[#007AFF] group-hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-[#1d1d1f] text-center leading-tight">Nueva<br>colección</span>
-                    </button>
+                        <span
+                            class="text-xs font-medium text-[#1d1d1f] text-center leading-tight">Nueva<br>colección</span>
+                    </a>
 
-                    <button class="bg-white/40 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/40 opacity-70 cursor-not-allowed flex flex-col items-center justify-center gap-2 relative">
-                        <span class="absolute -top-2 bg-[#FF9500] text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Pronto</span>
+                    <button
+                        class="bg-white/40 backdrop-blur-xl rounded-2xl p-4 border border-gray-200/40 opacity-70 cursor-not-allowed flex flex-col items-center justify-center gap-2 relative">
+                        <span
+                            class="absolute -top-2 bg-[#FF9500] text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Pronto</span>
                         <div class="w-10 h-10 rounded-full bg-gray-100 text-[#86868b] flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>
                         </div>
                         <span class="text-xs font-medium text-[#86868b] text-center leading-tight">Importar</span>
@@ -221,19 +159,14 @@
             <!-- Tag Cloud -->
             <div>
                 <h2 class="text-lg font-semibold text-[#1d1d1f] mb-4">Tus etiquetas</h2>
-                <div class="bg-white/80 backdrop-blur-xl rounded-2xl p-5 border border-gray-200/60 shadow-sm flex flex-wrap gap-2 items-center justify-center">
-                    <a href="#" class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">PHP</a>
-                    <a href="#" class="text-lg text-[#007AFF] font-medium hover:underline bg-[#007AFF]/10 rounded-full px-3 py-1">JavaScript</a>
-                    <a href="#" class="text-sm text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">Laravel</a>
-                    <a href="#" class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">CSS</a>
-                    <a href="#" class="text-lg text-[#007AFF] font-medium hover:underline bg-[#007AFF]/10 rounded-full px-3 py-1">React</a>
-                    <a href="#" class="text-sm text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">Docker</a>
-                    <a href="#" class="text-xs text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">PostgreSQL</a>
-                    <a href="#" class="text-sm text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">Redis</a>
-                    <a href="#" class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">DevOps</a>
-                    <a href="#" class="text-lg text-[#007AFF] font-medium hover:underline bg-[#007AFF]/10 rounded-full px-3 py-1">Frontend</a>
-                    <a href="#" class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">Backend</a>
-                    <a href="#" class="text-xs text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">Tutorial</a>
+                <div
+                    class="bg-white/80 backdrop-blur-xl rounded-2xl p-5 border border-gray-200/60 shadow-sm flex flex-wrap gap-2 items-center justify-center">
+                    @forelse ($tags as $tag)
+                        <span
+                            class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">{{ $tag->name }}</span>
+                    @empty
+                        <span>No tienes ninguna etiqueta registrada.</span>
+                    @endforelse
                 </div>
             </div>
         </div>

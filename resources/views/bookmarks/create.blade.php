@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex items-center mb-3">
-        <a href="{{ route('bookmarks.index') }}"
+        <a href="{{ url()->previous() }}"
             class="p-2 -ml-2 mr-2 text-[#86868b] hover:text-[#1d1d1f] hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Volver">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
