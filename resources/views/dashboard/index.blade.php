@@ -54,12 +54,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Left Column: Recent Bookmarks -->
         <div class="lg:col-span-2">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-[#1d1d1f]">Agregados recientemente</h2>
-                <a href="{{ route('bookmarks.index') }}" class="text-sm text-[#007AFF] hover:underline font-medium">Ver
-                    todos &rarr;</a>
-            </div>
-
+            @if ($recent_bookmarks->isNotEmpty())
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-[#1d1d1f]">Agregados recientemente</h2>
+                    <a href="{{ route('bookmarks.index') }}" class="text-sm text-[#007AFF] hover:underline font-medium">Ver
+                        todos &rarr;</a>
+                </div>
+            @endif
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @forelse ($recent_bookmarks as $bookmark)
                     <div x-data="{ isFavorite: {{ $bookmark->is_favorite ? 'true' : 'false' }} }"
@@ -103,7 +104,21 @@
                         </div>
                     </div>
                 @empty
-                    <span>Sin marcadores registrados.</span>
+                    <div class="col-span-2">
+                        <div class="flex flex-col items-center justify-center py-16 text-center">
+                            <div
+                                class="w-20 h-20 bg-gray-200/50 rounded-full flex items-center justify-center text-[#86868b] mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="1.5"
+                                        d="M11 2C7.229 2 5.343 2 4.172 3.129C3 4.257 3 6.074 3 9.708v8.273c0 2.306 0 3.459.773 3.871c1.496.8 4.304-1.867 5.637-2.67c.773-.465 1.16-.698 1.59-.698s.817.233 1.59.698c1.333.803 4.14 3.47 5.637 2.67c.773-.412.773-1.565.773-3.871V12m2-10l-7 7m7 0l-7-7" />
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-semibold text-[#1d1d1f] mb-2">Sin marcadores</h2>
+                            <p class="text-[#86868b] mb-6">No has registrado ningún marcador.</p>
+                        </div>
+                    </div>
                 @endforelse
             </div>
         </div>
@@ -165,7 +180,7 @@
                         <span
                             class="text-base text-[#007AFF] font-medium hover:underline bg-[#007AFF]/5 rounded-full px-3 py-1">{{ $tag->name }}</span>
                     @empty
-                        <span>No tienes ninguna etiqueta registrada.</span>
+                        <p class="text-[#86868b] p-4">No tienes ninguna etiqueta registrada.</p>
                     @endforelse
                 </div>
             </div>
