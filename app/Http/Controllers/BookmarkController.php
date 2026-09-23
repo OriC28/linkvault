@@ -59,7 +59,7 @@ class BookmarkController extends Controller
                 data: $request->except('tags'),
                 tags: $request->tags
             );
-            return redirect()->route('bookmarks.index');
+            return redirect()->route('bookmarks.index')->with('success', "El marcador '$bookmark->title' se actualizó correctamente.");
         } catch (NoChangesDetectedException  $e) {
             return redirect()->back()
                 ->with('warning', $e->getMessage())
@@ -72,6 +72,7 @@ class BookmarkController extends Controller
     {
         Gate::authorize('delete', $bookmark);
         $bookmark->delete();
-        return redirect()->route('bookmarks.index');
+        return redirect()->route('bookmarks.index')
+            ->with('success', "Se eliminó el marcador '$bookmark->title'. Puede verlo en la Papelera");
     }
 }

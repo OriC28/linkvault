@@ -25,7 +25,7 @@ class CollectionController extends Controller
         $user = $request->user();
         $user->collections()->create($request->validated());
 
-        return redirect()->route('collections.index');
+        return redirect()->route('collections.index')->with('success', 'Guardado con éxito');
     }
 
     public function show(Request $request, Collection $collection)
@@ -50,7 +50,10 @@ class CollectionController extends Controller
 
         $collection->update($request->validated());
 
-        return redirect()->route('collections.show', parameters: ['collection' => $collection]);
+        return redirect()->route(
+            'collections.show',
+            parameters: ['collection' => $collection]
+        )->with('success', "La colección '$collection->name' se actualizó correctamente.");
     }
 
     public function destroy(Collection $collection)
@@ -59,6 +62,7 @@ class CollectionController extends Controller
 
         $collection->delete();
 
-        return redirect()->route('collections.index');
+        return redirect()->route('collections.index')
+            ->with('success', "Se eliminó la colección '$collection->name'. Puede verlo en la Papelera.");
     }
 }
